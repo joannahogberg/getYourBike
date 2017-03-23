@@ -117,7 +117,7 @@ const BikeMap = (function() {
 
         getCities: (value) => {
 
-            alert(value);
+            // alert(value);
 
             if (value == "americas") {
                 document.getElementById("selContinents").innerHTML = "North and South America";
@@ -446,7 +446,7 @@ const BikeMap = (function() {
             //Get the value of clicked button using jquery and call BikeMap.getCities with parameter value
             $(document).ready(function() {
                 $('#europe').click(function() {
-                    alert($(this).attr("value"));
+                    // alert($(this).attr("value"));
                     let value = $(this).attr("value");
                     BikeMap.getCities($(this).attr("value"))
                         // BikeMap.getCities(value);
@@ -455,7 +455,7 @@ const BikeMap = (function() {
             });
             $(document).ready(function() {
                 $('#america').click(function() {
-                    alert($(this).attr("value"));
+                    // alert($(this).attr("value"));
                     let value = $(this).attr("value");
                     BikeMap.getCities($(this).attr("value"))
                         // BikeMap.getCities(value);
