@@ -5,7 +5,7 @@
 const BikeMap = (function() {
 
     document.getElementById("selContinents").innerHTML = "?";
-    const url = 'http://api.citybik.es/v2/networks';
+    const url = 'https://api.citybik.es/v2/networks';
     let myLatLng;
     let BikeNetwork = [];
 
@@ -216,7 +216,7 @@ const BikeMap = (function() {
 
                 // console.log(companyId);
             }).catch(function(error) {
-                console.log("Error");
+                console.log(error);
             });
 
 
