@@ -216,7 +216,7 @@ const BikeMap = (function() {
 
                 // console.log(companyId);
             }).catch(function(error) {
-                document.write("Error");
+                console.log("Error");
             });
 
 
