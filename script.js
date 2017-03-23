@@ -104,7 +104,7 @@ const BikeMap = (function() {
 
     // Google map call to define google
     $.ajax({
-        url: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyD5d6mNZZckhuKZfBZ9wO5Hq2u3oUrQfYE&callback=?',
+        url: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCpCilSrre3u5TACGa1XjkVHCWGiBDZZ5o&callback=?',
         dataType: 'json',
         jsonCallback: 'BikeMap'
     })
