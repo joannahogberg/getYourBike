@@ -8,6 +8,7 @@ const BikeMap = (function() {
     const url = 'https://api.citybik.es/v2/networks';
     let myLatLng;
     let BikeNetwork = [];
+    let errorMsg = document.getElementById("errMsg");
 
 
     // //let countries = ["BE", "CH", "CZ", "DK", "DE", "EE", "IE", "GR", "ES", "FR", "GB", "HR", "IT", "IS", "LU", "HU", "MT", "NL", "NO", "AT", "PL", "PT", "FI", "SE"];
@@ -132,7 +133,7 @@ const BikeMap = (function() {
             // Call to RESTful COUNTRIES API with callback function that returns objects in JSON format. 
             $.get("https://restcountries.eu/rest/v2/region/" + value, (country) => {
                 // console.log(country);
-
+                errorMsg.innerHTML = "";
                 //Loop through the objects and pushes the country codes into the countries array
                 for (prop in country) {
                     // console.log(country[prop].alpha2Code);
@@ -140,9 +141,10 @@ const BikeMap = (function() {
                 }
 
             }).catch(function(error) {
-                console.log("There was something wrong with the API...")
-                    //Backup for API
-                countries = ["BE", "CH", "CZ", "DK", "DE", "EE", "IE", "GR", "ES", "FR", "GB", "HR", "IT", "IS", "LU", "HU", "MT", "NL", "NO", "AT", "PL", "PT", "FI", "SE"];
+                console.log("There was something wrong with the API...");
+                errorMsg.innerHTML = "Try click again ;)";
+                //     //Backup for API
+                // countries = ["BE", "CH", "CZ", "DK", "DE", "EE", "IE", "GR", "ES", "FR", "GB", "HR", "IT", "IS", "LU", "HU", "MT", "NL", "NO", "AT", "PL", "PT", "FI", "SE"];
             });
 
             // const url = 'http://api.citybik.es/v2/networks';
@@ -150,8 +152,8 @@ const BikeMap = (function() {
 
             // Call to CityBikes API with callback function. Returns all bikeNetwork objects in JSON format
             $.get(url, (companies) => {
-                console.log(companies);
-
+                // console.log(companies);
+                errorMsg.innerHTML = "";
                 BikeNetwork = companies;
 
                 let selCityElem = document.getElementById("selCity");
@@ -175,6 +177,8 @@ const BikeMap = (function() {
                             selCityElem.innerHTML += `<option value="${arr[i].id}">${location.city} - ${location.country} </option>`;
                         } else {
                             console.log('Country code is not in array');
+
+
                         }
 
                     }
@@ -217,6 +221,8 @@ const BikeMap = (function() {
                 // console.log(companyId);
             }).catch(function(error) {
                 console.log(error);
+                errorMsg.innerHTML = "Try click again ;)";
+
             });
 
 
