@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <!--<link rel="stylesheet" type="text/css" href="main.css">-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <title>STRAVA</title>
+
+    <style>
+        #mapContainer {
+            height: 400px;
+        }
+        
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <h1>Let me know where you're going:</h1>
+
+    <button type="button" value="americas" id="america" class="selBtn">America</button>
+    <button type="button" value="europe" id="europe" class="selBtn">Europe</button>
+
+    <h3>Select a city below in <span id="selContinents"></span> that offers bikes and you will receive a map of all stations where you can go and get your bike:</h3>
+    <select id="selCity" name="selCityElem"> </select>
+
+    <div id="mapContainer">
+        <div id="map" class="bikeMap"></div>
+    </div>
+
+
+    <script type="text/javascript " src="script.js "></script>
+    <!--<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js ">
+    </script>-->
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>-->
+    <!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5d6mNZZckhuKZfBZ9wO5Hq2u3oUrQfYE">
+    </script>-->
+
+    <!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5d6mNZZckhuKZfBZ9wO5Hq2u3oUrQfYE&callback=BikeMap.initMap">
+    </script>-->
+
+
+</body>
+
+</html>
