@@ -5,100 +5,41 @@
 const BikeMap = (function() {
 
     document.getElementById("selContinents").innerHTML = "?";
+    let inputElem = document.getElementById("input");
+
     const url = 'https://api.citybik.es/v2/networks';
     let myLatLng;
     let BikeNetwork = [];
     let errorMsg = document.getElementById("errMsg");
 
 
-    // //let countries = ["BE", "CH", "CZ", "DK", "DE", "EE", "IE", "GR", "ES", "FR", "GB", "HR", "IT", "IS", "LU", "HU", "MT", "NL", "NO", "AT", "PL", "PT", "FI", "SE"];
-    // let countries = [];
+    //Get the value of clicked button using jquery and call BikeMap.getCities with parameter value
+    $(document).ready(function() {
+        $('#europe').click(function() {
+            // alert($(this).attr("value"));
+            let value = $(this).attr("value");
+            BikeMap.getCities($(this).attr("value"))
+                // BikeMap.getCities(value);
+                // alert(value)
+        });
+    });
+    $(document).ready(function() {
+        $('#america').click(function() {
+            // alert($(this).attr("value"));
+            let value = $(this).attr("value");
+            BikeMap.getCities($(this).attr("value"))
+                // BikeMap.getCities(value);
+                // alert(value)
 
-    // // Call to RESTful COUNTRIES API with callback function that returns objects in JSON format. 
-    // $.get("https://restcountries.eu/rest/v2/region/europe", (country) => {
-    //     // console.log(country);
+        });
+    });
 
-    //     //Loop through the objects and pushes the country codes into the countries array
-    //     for (prop in country) {
-    //         // console.log(country[prop].alpha2Code);
-    //         countries.push(country[prop].alpha2Code);
-    //     }
+    $(function() {
+        $('#input').change(function() {
+            BikeMap.getBikeDetails($("#selCity option[value='" + $('#input').val() + "']").attr('id'));
+        });
+    });
 
-    // }).catch(function(error) {
-    //     console.log("There was something wrong with the API...")
-    //         //Backup for API
-    //     countries = ["BE", "CH", "CZ", "DK", "DE", "EE", "IE", "GR", "ES", "FR", "GB", "HR", "IT", "IS", "LU", "HU", "MT", "NL", "NO", "AT", "PL", "PT", "FI", "SE"];
-    // });
-
-    // const url = 'http://api.citybik.es/v2/networks';
-    // let BikeNetwork = [];
-
-    // // Call to CityBikes API with callback function. Returns all bikeNetwork objects in JSON format
-    // $.get(url, (companies) => {
-    //     console.log(companies);
-    //     BikeNetwork = companies;
-    //     let selCityElem = document.getElementById("selCity");
-    //     for (prop in companies) {
-
-    //         const arr = companies[prop];
-
-    //         for (var i = 0; i < arr.length; i++) {
-
-
-    //             let location = arr[i].location;
-
-
-    //             let code = location.country;
-    //             //jQuery utility function to find whether an element exist in array or not
-    //             if ($.inArray(code, countries) != -1) {
-
-    //                 // companyId.push(arr[i].id)
-    //                 //Sets the select option values to each city's name 
-    //                 selCityElem.innerHTML += `<option value="${arr[i].id}">${location.city} - ${location.country} </option>`;
-    //             } else {
-    //                 console.log('Country code is not in array');
-    //             }
-
-    //         }
-
-    //         // $.get("https://restcountries.eu/rest/v2/alpha?codes=" + location.country, (response) => {
-    //         //     //     // console.log(response);
-    //         //     //     for (prop in response) {
-    //         //     //         // console.log(response[prop].name);
-    //         //     //         country = response[prop].name;
-    //         //     //         console.log(country);
-    //         //     //     }
-
-    //         //     // });
-
-    //         /**
-    //          * jQuery plugin to sort values alphabetically in select
-    //          * source: http://stackoverflow.com/questions/12073270/sorting-options-elements-alphabetically-using-jquery
-    //          */
-    //         $.fn.extend({
-    //             sortSelect() {
-    //                 let options = this.find("option"),
-    //                     arr = options.map(function(_, o) { return { t: $(o).text(), v: o.value }; }).get();
-
-    //                 arr.sort((o1, o2) => { // sort select
-    //                     let t1 = o1.t.toLowerCase(),
-    //                         t2 = o2.t.toLowerCase();
-    //                     return t1 > t2 ? 1 : t1 < t2 ? -1 : 0;
-    //                 });
-
-    //                 options.each((i, o) => {
-    //                     o.value = arr[i].v;
-    //                     $(o).text(arr[i].t);
-    //                 });
-    //             }
-    //         });
-    //         $("select").sortSelect();
-
-    //     }
-    //     // console.log(companyId);
-    // }).catch(function(error) {
-    //     document.write("Error");
-    // });
 
 
 
@@ -114,26 +55,28 @@ const BikeMap = (function() {
 
     return {
 
-
-
         getCities: (value) => {
-
-            // alert(value);
 
             if (value == "americas") {
                 document.getElementById("selContinents").innerHTML = "North and South America";
 
+
             } else {
                 document.getElementById("selContinents").innerHTML = "Europe";
+
             }
 
             //let countries = ["BE", "CH", "CZ", "DK", "DE", "EE", "IE", "GR", "ES", "FR", "GB", "HR", "IT", "IS", "LU", "HU", "MT", "NL", "NO", "AT", "PL", "PT", "FI", "SE"];
             let countries = [];
 
+
+            console.log(value);
+
             // Call to RESTful COUNTRIES API with callback function that returns objects in JSON format. 
             $.get("https://restcountries.eu/rest/v2/region/" + value, (country) => {
                 // console.log(country);
                 errorMsg.innerHTML = "";
+
                 //Loop through the objects and pushes the country codes into the countries array
                 for (prop in country) {
                     // console.log(country[prop].alpha2Code);
@@ -152,8 +95,9 @@ const BikeMap = (function() {
 
             // Call to CityBikes API with callback function. Returns all bikeNetwork objects in JSON format
             $.get(url, (companies) => {
-                // console.log(companies);
+                console.log(companies);
                 errorMsg.innerHTML = "";
+                $('input[type=text]').attr('placeholder', 'Select city from list');
                 BikeNetwork = companies;
 
                 let selCityElem = document.getElementById("selCity");
@@ -174,7 +118,8 @@ const BikeMap = (function() {
 
                             // companyId.push(arr[i].id)
                             //Sets the select option values to each city's name 
-                            selCityElem.innerHTML += `<option value="${arr[i].id}">${location.city} - ${location.country} </option>`;
+                            // selCityElem.innerHTML += `<option value="${arr[i].id}">${location.city} - ${location.country} </option>`;
+                            selCityElem.innerHTML += `<option value="${location.city} - ${location.country}" id="${arr[i].id}">${arr[i].id} </option>`;
                         } else {
                             console.log('Country code is not in array');
 
@@ -231,23 +176,38 @@ const BikeMap = (function() {
         },
 
 
-        getBikeDetails: (BikeNetwork) => {
+        getBikeDetails: (selCityId) => {
 
-            const selCityId = document.getElementById("selCity").value;
+
+            // console.log(selCityId);
+
             let lat;
             let lng;
             for (prop in BikeNetwork) {
                 let arr = BikeNetwork[prop];
+
                 for (let i = 0; i < arr.length; i++) {
-                    if (arr[i].id == selCityId) {
+                    if (arr[i].location.city == selCityId) {
                         lat = arr[i].location.latitude;
                         lng = arr[i].location.longitude;
-                        console.log(lat, lng);
+                        // console.log(lat, lng);
                         myLatLng = { lat: lat, lng: lng };
                     }
                 }
 
             }
+            // for (prop in BikeNetwork) {
+            //     let arr = BikeNetwork[prop];
+            //     for (let i = 0; i < arr.length; i++) {
+            //         if (arr[i].id == selCityId) {
+            //             lat = arr[i].location.latitude;
+            //             lng = arr[i].location.longitude;
+            //             console.log(lat, lng);
+            //             myLatLng = { lat: lat, lng: lng };
+            //         }
+            //     }
+
+            // }
             // BikeMap.getStationLatLng(selCityId)
             BikeMap.initMap(selCityId);
 
@@ -259,6 +219,7 @@ const BikeMap = (function() {
         initMap: (selCityStations) => {
 
 
+            // alert(selCityStations);
             $.get(url + '/' + selCityStations, (response) => {
                 console.log("stations", response);
                 let locations = [];
@@ -445,39 +406,52 @@ const BikeMap = (function() {
                 map.fitBounds(bounds);
 
             });
+            document.getElementById("input").addEventListener("click", BikeMap.deleteVal);
+        },
+        //Clear the input field when clicked
+        deleteVal: () => {
+
+            inputElem.value = "";
+
         },
 
         chooseContinent: () => {
 
-            //Get the value of clicked button using jquery and call BikeMap.getCities with parameter value
-            $(document).ready(function() {
-                $('#europe').click(function() {
-                    // alert($(this).attr("value"));
-                    let value = $(this).attr("value");
-                    BikeMap.getCities($(this).attr("value"))
-                        // BikeMap.getCities(value);
-                        // alert(value)
-                });
-            });
-            $(document).ready(function() {
-                $('#america').click(function() {
-                    // alert($(this).attr("value"));
-                    let value = $(this).attr("value");
-                    BikeMap.getCities($(this).attr("value"))
-                        // BikeMap.getCities(value);
-                        // alert(value)
-                });
-            });
+            // //Get the value of clicked button using jquery and call BikeMap.getCities with parameter value
+            // $(document).ready(function() {
+            //     $('#europe').click(function() {
+            //         // alert($(this).attr("value"));
+            //         let value = $(this).attr("value");
+            //         BikeMap.getCities($(this).attr("value"))
+            //             // BikeMap.getCities(value);
+            //             // alert(value)
+            //     });
+            // });
+            // $(document).ready(function() {
+            //     $('#america').click(function() {
+            //         // alert($(this).attr("value"));
+            //         let value = $(this).attr("value");
+            //         BikeMap.getCities($(this).attr("value"))
+            //             // BikeMap.getCities(value);
+            //             // alert(value)
 
-            document.getElementById("selCity").addEventListener("change", BikeMap.getBikeDetails);
+            //     });
+            // });
+
+            // document.getElementById("selCity").addEventListener("change", BikeMap.getBikeDetails);
+            // document.getElementById("selCity").addEventListener("input", BikeMap.getBikeDetails);
+
+
+            // $(function() {
+            //     $('#input').change(function() {
+            //         BikeMap.getBikeDetails($("#selCity option[value='" + $('#input').val() + "']").attr('id'));
+            //     });
+            // });
         }
-
-
-
     }
 
 })();
 
 // document.getElementById("selCity").addEventListener("change", BikeMap.getBikeDetails);
 // BikeMap.getCities();
-BikeMap.chooseContinent();
+// BikeMap.chooseContinent();
