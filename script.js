@@ -34,11 +34,33 @@ const BikeMap = (function() {
         });
     });
 
-    $(function() {
-        $('#input').change(function() {
-            BikeMap.getBikeDetails($("#selCity option[value='" + $('#input').val() + "']").attr('id'));
-        });
-    });
+    // $(function() {
+    //     $('#input').change(function() {
+    //         BikeMap.getBikeDetails($("#selCity option[value='" + $('#input').val() + "']").attr('id'));
+    //     });
+    // });
+
+    //http://stackoverflow.com/questions/26103285/find-selected-item-in-datalist-in-html
+    // $(function() {
+    //     $('#input').change(function() {
+    //         // BikeMap.getBikeDetails($("#selCity option[value='" + $('#input').val() + "']").attr('id'));
+    //         BikeMap.getBikeDetails();
+
+
+    //     });
+    // });
+
+    document.getElementsByName("selCity")[0].onchange = function(event) {
+        var evt = event || window.event;
+        var parElem = evt.srcElement || evt.target;
+        for (var i = 0; i < document.getElementById('options').options.length; i++) {
+            if (document.getElementById('options').options[i].value == document.getElementsByName("selCity")[0].value) {
+                BikeMap.getBikeDetails(document.getElementById('options').options[i].text);
+                break;
+            }
+        }
+    }
+
 
 
 
@@ -100,7 +122,8 @@ const BikeMap = (function() {
                 $('input[type=text]').attr('placeholder', 'Select city from list');
                 BikeNetwork = companies;
 
-                let selCityElem = document.getElementById("selCity");
+                // let selCityElem = document.getElementById("selCity");
+                let selCityElem = document.getElementById("options");
                 selCityElem.innerHTML = "";
                 for (prop in companies) {
 
@@ -180,6 +203,12 @@ const BikeMap = (function() {
 
 
             // console.log(selCityId);
+            // const selCityId = document.getElementById("options").text;
+
+            // const x = document.getElementById("options").selectedIndex;
+            // const selCityId = document.getElementsByTagName("option")[x].text;
+            // const selCityId = $("#options").val();
+            // alert(selCityId)
 
             let lat;
             let lng;
@@ -414,39 +443,46 @@ const BikeMap = (function() {
             inputElem.value = "";
 
         },
+        //Enables click on search-button when enter-key is pressed.
+        enterKey: (key) => {
+            // key = window.event;
+            // if (window.event.keyCode == 13) {
+            //     document.getElementById("input").click();
+            //     return false;
+            // }
 
-        chooseContinent: () => {
+            // chooseContinent: () => {
 
-            // //Get the value of clicked button using jquery and call BikeMap.getCities with parameter value
-            // $(document).ready(function() {
-            //     $('#europe').click(function() {
-            //         // alert($(this).attr("value"));
-            //         let value = $(this).attr("value");
-            //         BikeMap.getCities($(this).attr("value"))
-            //             // BikeMap.getCities(value);
-            //             // alert(value)
-            //     });
-            // });
-            // $(document).ready(function() {
-            //     $('#america').click(function() {
-            //         // alert($(this).attr("value"));
-            //         let value = $(this).attr("value");
-            //         BikeMap.getCities($(this).attr("value"))
-            //             // BikeMap.getCities(value);
-            //             // alert(value)
+            //     // //Get the value of clicked button using jquery and call BikeMap.getCities with parameter value
+            //     // $(document).ready(function() {
+            //     //     $('#europe').click(function() {
+            //     //         // alert($(this).attr("value"));
+            //     //         let value = $(this).attr("value");
+            //     //         BikeMap.getCities($(this).attr("value"))
+            //     //             // BikeMap.getCities(value);
+            //     //             // alert(value)
+            //     //     });
+            //     // });
+            //     // $(document).ready(function() {
+            //     //     $('#america').click(function() {
+            //     //         // alert($(this).attr("value"));
+            //     //         let value = $(this).attr("value");
+            //     //         BikeMap.getCities($(this).attr("value"))
+            //     //             // BikeMap.getCities(value);
+            //     //             // alert(value)
 
-            //     });
-            // });
+            //     //     });
+            //     // });
 
-            // document.getElementById("selCity").addEventListener("change", BikeMap.getBikeDetails);
-            // document.getElementById("selCity").addEventListener("input", BikeMap.getBikeDetails);
+            //     // document.getElementById("selCity").addEventListener("change", BikeMap.getBikeDetails);
+            //     // document.getElementById("selCity").addEventListener("input", BikeMap.getBikeDetails);
+            document.getElementById("options").addEventListener("change", BikeMap.getBikeDetails);
 
-
-            // $(function() {
-            //     $('#input').change(function() {
-            //         BikeMap.getBikeDetails($("#selCity option[value='" + $('#input').val() + "']").attr('id'));
-            //     });
-            // });
+            //     // $(function() {
+            //     //     $('#input').change(function() {
+            //     //         BikeMap.getBikeDetails($("#selCity option[value='" + $('#input').val() + "']").attr('id'));
+            //     //     });
+            //     // });
         }
     }
 
@@ -454,4 +490,4 @@ const BikeMap = (function() {
 
 // document.getElementById("selCity").addEventListener("change", BikeMap.getBikeDetails);
 // BikeMap.getCities();
-// BikeMap.chooseContinent();
+BikeMap.enterKey();
