@@ -10,7 +10,7 @@ Application to display pick-up stations for bikes in selected city https://joann
 - Have good understanding of AJAX and asynchronous communication and how to work asynchronously in JavaScript.
 
 #### Ajax calls – APIs
--	The app uses jQuery get() Method with the Promise interface to load data from three different APIs.
+The app uses jQuery get() Method with the Promise interface to load data from three different APIs.
 
 1. When the buttons are clicked, the first request is sent to the https://restcountries.eu/rest/v2/region/ + (value that is received from the button element). The response is returned in JSON format. The done Promise then loops through the objects properties and pushes the country code value into the countries array and calls the appendList function.
 
