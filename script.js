@@ -10,7 +10,7 @@ const BikeMap = (function() {
     const url = 'https://api.citybik.es/v2/networks';
     let myLatLng;
     let BikeNetwork = [];
-    let errorMsg = document.getElementById("errMsg");
+
 
 
     //Get the value of clicked button using jquery and call BikeMap.getCities with parameter value
@@ -33,51 +33,6 @@ const BikeMap = (function() {
 
         });
     });
-    // $(document).ready(function() {
-    //     $('#input').on('blur change', (function() {
-    //         // BikeMap.getBikeDetails($("#selCity option[value='" + $('#input').val() + "']").attr('id'));
-    //         // BikeMap.getBikeDetails($("#options option[value='" + $('#input').val() + "']").attr('id'));
-    //         BikeMap.getBikeDetails();
-    //         return
-    //     }));
-
-    //     // });
-    // });
-
-
-    // $(function() {
-    //     $('#input').change(function() {
-    //         // BikeMap.getBikeDetails($("#selCity option[value='" + $('#input').val() + "']").attr('id'));
-    //         // BikeMap.getBikeDetails($("#options option[value='" + $('#input').val() + "']").attr('id'));
-    //         BikeMap.getBikeDetails();
-    //     });
-    // });
-
-    //http://stackoverflow.com/questions/26103285/find-selected-item-in-datalist-in-html
-    // $(function() {
-    //     $('#input').change(function() {
-
-
-
-    //         BikeMap.getBikeDetails();
-
-
-    //     });
-    // });
-
-    // document.getElementsByName("selCity")[0].onchange = function(event) {
-    //     var evt = event || window.event;
-    //     var parElem = evt.srcElement || evt.target;
-    //     for (var i = 0; i < document.getElementById('options').options.length; i++) {
-    //         if (document.getElementById('options').options[i].value == document.getElementsByName("selCity")[0].value) {
-    //             alert(document.getElementById('options').options[i].value);
-    //             // BikeMap.getBikeDetails(document.getElementById('options').options[i].value);
-    //             // BikeMap.getBikeDetails(document.getElementById('options').options[i].value);
-    //             break;
-    //         }
-    //     }
-    // }
-
 
 
 
@@ -90,131 +45,114 @@ const BikeMap = (function() {
     })
 
 
-
+    let countries = [];
 
     return {
 
         getCities: (value) => {
-            alert("1")
+
             if (value == "americas") {
                 document.getElementById("selContinents").innerHTML = "North and South America";
-
 
             } else {
                 document.getElementById("selContinents").innerHTML = "Europe";
 
             }
 
-            //let countries = ["BE", "CH", "CZ", "DK", "DE", "EE", "IE", "GR", "ES", "FR", "GB", "HR", "IT", "IS", "LU", "HU", "MT", "NL", "NO", "AT", "PL", "PT", "FI", "SE"];
-            let countries = [];
-
-
-            console.log(value);
-
             // Call to RESTful COUNTRIES API with callback function that returns objects in JSON format. 
             $.get("https://restcountries.eu/rest/v2/region/" + value, (country) => {
-                // console.log(country);
-                errorMsg.innerHTML = "";
+                    // console.log(country);
+                    console.log("success");
+                })
+                .done(function(country) {
+                    console.log("finished");
+                    for (prop in country) {
+                        // console.log(country[prop].alpha2Code);
+                        countries.push(country[prop].alpha2Code);
+                    }
+                    BikeMap.appendList();
+                }).fail(function() {
+                    console.log("error");
+                    $('input[type=text]').attr('placeholder', 'Could not load cities :(');
+                }).always(function() {
+                    console.log("finished");
+                });
 
-                //Loop through the objects and pushes the country codes into the countries array
-                for (prop in country) {
-                    // console.log(country[prop].alpha2Code);
-                    countries.push(country[prop].alpha2Code);
-                }
+        },
 
-            }).catch(function(error) {
-                console.log("There was something wrong with the API...");
-                errorMsg.innerHTML = "Try click again ;)";
-                //     //Backup for API
-                // countries = ["BE", "CH", "CZ", "DK", "DE", "EE", "IE", "GR", "ES", "FR", "GB", "HR", "IT", "IS", "LU", "HU", "MT", "NL", "NO", "AT", "PL", "PT", "FI", "SE"];
-            });
+        // appendList: (countries) => {
+        appendList: () => {
 
-            // const url = 'http://api.citybik.es/v2/networks';
-            // var BikeNetwork = [];
+            // console.log(countries);
 
             // Call to CityBikes API with callback function. Returns all bikeNetwork objects in JSON format
             $.get(url, (companies) => {
-                console.log(companies);
-                errorMsg.innerHTML = "";
-                $('input[type=text]').attr('placeholder', 'Select city from list');
-                BikeNetwork = companies;
-
-                // let selCityElem = document.getElementById("selCity");
-                let selCityElem = document.getElementById("options");
-                selCityElem.innerHTML = "";
-                for (prop in companies) {
-
-                    const arr = companies[prop];
-
-                    for (var i = 0; i < arr.length; i++) {
 
 
-                        let location = arr[i].location;
+                    // console.log(country);
+                    console.log("success");
+                })
+                .done(function(companies) {
+                    console.log("finished");
+                    console.log(companies);
 
+                    $('input[type=text]').attr('placeholder', 'Select city from list');
+                    BikeNetwork = companies;
 
-                        let code = location.country;
-                        //jQuery utility function to find whether an element exist in array or not
-                        if ($.inArray(code, countries) != -1) {
+                    // let selCityElem = document.getElementById("selCity");
+                    let selCityElem = document.getElementById("options");
+                    selCityElem.innerHTML = "";
+                    for (prop in companies) {
 
+                        const arr = companies[prop];
 
-                            //Sets the select option values to each city's name 
-                            // selCityElem.innerHTML += `<option value="${arr[i].id}">${location.city} - ${location.country} </option>`;
-                            // selCityElem.innerHTML += `<option value="${location.city} - ${location.country}" id="${arr[i].id}">${arr[i].id} </option>`;
-                            selCityElem.innerHTML += `<option value="${location.city} - ${location.country}" id="${arr[i].id}">${arr[i].id}</option>`;
-                        } else {
-                            console.log('Country code is not in array');
+                        for (var i = 0; i < arr.length; i++) {
+
+                            let location = arr[i].location;
+                            let code = location.country;
+                            //jQuery utility function to find whether an element exist in array or not
+                            if ($.inArray(code, countries) != -1) {
+
+                                //Sets the select option values to each city's name 
+                                selCityElem.innerHTML += `<option value="${location.city}" label="${location.city}">${arr[i].id}</option>`;
+                            }
 
 
                         }
+
+
+                        /**
+                         * jQuery plugin to sort values alphabetically in select
+                         * source: http://stackoverflow.com/questions/45888/what-is-the-most-efficient-way-to-sort-an-html-selects-options-by-value-while
+                         */
+
+                        $.fn.sort_select_box = function() {
+                            // Get options from select box
+                            let my_options = $("#" + this.attr('id') + ' option');
+                            // sort alphabetically
+                            my_options.sort(function(a, b) {
+                                    if (a.value > b.value) return 1;
+                                    else if (a.value < b.value) return -1;
+                                    else return 0
+                                })
+                                //replace with sorted my_options;
+                            $(this).empty().append(my_options);
+
+                            // clearing any selections
+                            $("#" + this.attr('id') + "option").attr('selected', false);
+                        }
+
+                        $('#options').sort_select_box();
 
                     }
-
-                    // $.get("https://restcountries.eu/rest/v2/alpha?codes=" + location.country, (response) => {
-                    //     //     // console.log(response);
-                    //     //     for (prop in response) {
-                    //     //         // console.log(response[prop].name);
-                    //     //         country = response[prop].name;
-                    //     //         console.log(country);
-                    //     //     }
-
-                    //     // });
-
-                    /**
-                     * jQuery plugin to sort values alphabetically in select
-                     * source: http://stackoverflow.com/questions/12073270/sorting-options-elements-alphabetically-using-jquery
-                     */
-                    $.fn.extend({
-                        sortSelect() {
-                            let options = this.find("option"),
-                                arr = options.map(function(_, o) { return { t: $(o).text(), v: o.value }; }).get();
-
-                            arr.sort((o1, o2) => { // sort select
-                                let t1 = o1.t.toLowerCase(),
-                                    t2 = o2.t.toLowerCase();
-                                return t1 > t2 ? 1 : t1 < t2 ? -1 : 0;
-                            });
-
-                            options.each((i, o) => {
-                                o.value = arr[i].v;
-                                $(o).text(arr[i].t);
-                            });
-                        }
-                    });
-                    $("select").sortSelect();
-
-                }
-
-                // console.log(companyId);
-            }).catch(function(error) {
-                console.log(error);
-                errorMsg.innerHTML = "Try click again ;)";
-
-            });
-
-
-
-
-
+                })
+                .fail(function() {
+                    console.log("error");
+                    $('input[type=text]').attr('placeholder', 'Could not load cities :(');
+                })
+                .always(function() {
+                    console.log("finished");
+                });
 
         },
 
@@ -222,11 +160,11 @@ const BikeMap = (function() {
         getBikeDetails: () => {
 
             //Get value from selected option for Safari
-            let selCityId = $("#selCity option:selected").text();
+            const x = document.getElementById("options").selectedIndex;
+            let selCityId = document.getElementsByTagName("option")[x].text;
 
-
-
-            //Get value from selected option in dataList for Chrome
+            // Get value from selected option in dataList
+            // for Chrome
             for (var i = 0; i < document.getElementById('options').options.length; i++) {
                 if (document.getElementById('options').options[i].value == document.getElementsByName("selCity")[0].value) {
                     // alert(document.getElementById('options').options[i].value);
@@ -236,7 +174,7 @@ const BikeMap = (function() {
                 }
             }
 
-            alert(selCityId);
+            // alert(selCityId);
 
             let lat;
             let lng;
@@ -469,6 +407,5 @@ const BikeMap = (function() {
 
 })();
 
-// document.getElementById("selCity").addEventListener("change", BikeMap.getBikeDetails);
-// BikeMap.getCities();
+
 BikeMap.init();
