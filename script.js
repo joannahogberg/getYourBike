@@ -33,33 +33,50 @@ const BikeMap = (function() {
 
         });
     });
+    // $(document).ready(function() {
+    //     $('#input').on('blur change', (function() {
+    //         // BikeMap.getBikeDetails($("#selCity option[value='" + $('#input').val() + "']").attr('id'));
+    //         // BikeMap.getBikeDetails($("#options option[value='" + $('#input').val() + "']").attr('id'));
+    //         BikeMap.getBikeDetails();
+    //         return
+    //     }));
+
+    //     // });
+    // });
+
 
     // $(function() {
     //     $('#input').change(function() {
-    //         BikeMap.getBikeDetails($("#selCity option[value='" + $('#input').val() + "']").attr('id'));
+    //         // BikeMap.getBikeDetails($("#selCity option[value='" + $('#input').val() + "']").attr('id'));
+    //         // BikeMap.getBikeDetails($("#options option[value='" + $('#input').val() + "']").attr('id'));
+    //         BikeMap.getBikeDetails();
     //     });
     // });
 
     //http://stackoverflow.com/questions/26103285/find-selected-item-in-datalist-in-html
     // $(function() {
     //     $('#input').change(function() {
-    //         // BikeMap.getBikeDetails($("#selCity option[value='" + $('#input').val() + "']").attr('id'));
+
+
+
     //         BikeMap.getBikeDetails();
 
 
     //     });
     // });
 
-    document.getElementsByName("selCity")[0].onchange = function(event) {
-        var evt = event || window.event;
-        var parElem = evt.srcElement || evt.target;
-        for (var i = 0; i < document.getElementById('options').options.length; i++) {
-            if (document.getElementById('options').options[i].value == document.getElementsByName("selCity")[0].value) {
-                BikeMap.getBikeDetails(document.getElementById('options').options[i].text);
-                break;
-            }
-        }
-    }
+    // document.getElementsByName("selCity")[0].onchange = function(event) {
+    //     var evt = event || window.event;
+    //     var parElem = evt.srcElement || evt.target;
+    //     for (var i = 0; i < document.getElementById('options').options.length; i++) {
+    //         if (document.getElementById('options').options[i].value == document.getElementsByName("selCity")[0].value) {
+    //             alert(document.getElementById('options').options[i].value);
+    //             // BikeMap.getBikeDetails(document.getElementById('options').options[i].value);
+    //             // BikeMap.getBikeDetails(document.getElementById('options').options[i].value);
+    //             break;
+    //         }
+    //     }
+    // }
 
 
 
@@ -78,7 +95,7 @@ const BikeMap = (function() {
     return {
 
         getCities: (value) => {
-
+            alert("1")
             if (value == "americas") {
                 document.getElementById("selContinents").innerHTML = "North and South America";
 
@@ -139,10 +156,11 @@ const BikeMap = (function() {
                         //jQuery utility function to find whether an element exist in array or not
                         if ($.inArray(code, countries) != -1) {
 
-                            // companyId.push(arr[i].id)
+
                             //Sets the select option values to each city's name 
                             // selCityElem.innerHTML += `<option value="${arr[i].id}">${location.city} - ${location.country} </option>`;
-                            selCityElem.innerHTML += `<option value="${location.city} - ${location.country}" id="${arr[i].id}">${arr[i].id} </option>`;
+                            // selCityElem.innerHTML += `<option value="${location.city} - ${location.country}" id="${arr[i].id}">${arr[i].id} </option>`;
+                            selCityElem.innerHTML += `<option value="${location.city} - ${location.country}" id="${arr[i].id}">${arr[i].id}</option>`;
                         } else {
                             console.log('Country code is not in array');
 
@@ -196,19 +214,29 @@ const BikeMap = (function() {
 
 
 
+
+
         },
 
 
-        getBikeDetails: (selCityId) => {
+        getBikeDetails: () => {
+
+            //Get value from selected option for Safari
+            let selCityId = $("#selCity option:selected").text();
 
 
-            // console.log(selCityId);
-            // const selCityId = document.getElementById("options").text;
 
-            // const x = document.getElementById("options").selectedIndex;
-            // const selCityId = document.getElementsByTagName("option")[x].text;
-            // const selCityId = $("#options").val();
-            // alert(selCityId)
+            //Get value from selected option in dataList for Chrome
+            for (var i = 0; i < document.getElementById('options').options.length; i++) {
+                if (document.getElementById('options').options[i].value == document.getElementsByName("selCity")[0].value) {
+                    // alert(document.getElementById('options').options[i].value);
+                    selCityId = document.getElementById('options').options[i].text;
+
+                    break;
+                }
+            }
+
+            alert(selCityId);
 
             let lat;
             let lng;
@@ -225,19 +253,7 @@ const BikeMap = (function() {
                 }
 
             }
-            // for (prop in BikeNetwork) {
-            //     let arr = BikeNetwork[prop];
-            //     for (let i = 0; i < arr.length; i++) {
-            //         if (arr[i].id == selCityId) {
-            //             lat = arr[i].location.latitude;
-            //             lng = arr[i].location.longitude;
-            //             console.log(lat, lng);
-            //             myLatLng = { lat: lat, lng: lng };
-            //         }
-            //     }
 
-            // }
-            // BikeMap.getStationLatLng(selCityId)
             BikeMap.initMap(selCityId);
 
 
@@ -443,46 +459,11 @@ const BikeMap = (function() {
             inputElem.value = "";
 
         },
-        //Enables click on search-button when enter-key is pressed.
-        enterKey: (key) => {
-            // key = window.event;
-            // if (window.event.keyCode == 13) {
-            //     document.getElementById("input").click();
-            //     return false;
-            // }
 
-            // chooseContinent: () => {
+        init: () => {
 
-            //     // //Get the value of clicked button using jquery and call BikeMap.getCities with parameter value
-            //     // $(document).ready(function() {
-            //     //     $('#europe').click(function() {
-            //     //         // alert($(this).attr("value"));
-            //     //         let value = $(this).attr("value");
-            //     //         BikeMap.getCities($(this).attr("value"))
-            //     //             // BikeMap.getCities(value);
-            //     //             // alert(value)
-            //     //     });
-            //     // });
-            //     // $(document).ready(function() {
-            //     //     $('#america').click(function() {
-            //     //         // alert($(this).attr("value"));
-            //     //         let value = $(this).attr("value");
-            //     //         BikeMap.getCities($(this).attr("value"))
-            //     //             // BikeMap.getCities(value);
-            //     //             // alert(value)
+            document.getElementById("input").addEventListener("change", BikeMap.getBikeDetails);
 
-            //     //     });
-            //     // });
-
-            //     // document.getElementById("selCity").addEventListener("change", BikeMap.getBikeDetails);
-            //     // document.getElementById("selCity").addEventListener("input", BikeMap.getBikeDetails);
-            document.getElementById("options").addEventListener("change", BikeMap.getBikeDetails);
-
-            //     // $(function() {
-            //     //     $('#input').change(function() {
-            //     //         BikeMap.getBikeDetails($("#selCity option[value='" + $('#input').val() + "']").attr('id'));
-            //     //     });
-            //     // });
         }
     }
 
@@ -490,4 +471,4 @@ const BikeMap = (function() {
 
 // document.getElementById("selCity").addEventListener("change", BikeMap.getBikeDetails);
 // BikeMap.getCities();
-BikeMap.enterKey();
+BikeMap.init();

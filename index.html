@@ -18,6 +18,18 @@
             width: 500px;
             height: 500px;
         }
+        
+        input[list="selCity"] {
+            width: 12em;
+            border: none;
+            background: #eee;
+        }
+        
+        select {
+            width: 12em;
+            margin: 0;
+            margin-left: -12.75em;
+        }
     </style>
 </head>
 
@@ -32,15 +44,17 @@
 
     <h3>Select a city below in <span id="selContinents"></span> that offers bikes and you will receive a map of all stations where you can go and get your bike:</h3>
     <!--<select id="selCity" name="selCityElem"> </select>-->
-    <input list="selCity" id="input" name="selCity" type="text">
+    <input list="selCity" id="input" name="selCity" type="text" value="">
     <!--onchange="BikeMap.getBikeDetails()"-->
+    <label for="selCity">
     <datalist id="selCity">
-        <select id="options" >
+       
+        <select id="options" onchange="BikeMap.getBikeDetails()">
             
         </select>
         
     </datalist>
-
+ </label>
     <div id="mapContainer">
         <div id="map" class="bikeMap"></div>
     </div>
