@@ -4,49 +4,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
-    <!--<link rel="stylesheet" type="text/css" href="main.css">-->
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap-flex.css">
+    <link rel="stylesheet" href="css/main.css">
     <title>getYourBike</title>
 
-    <style>
-        #mapContainer {
-            height: 300px;
-        }
-        
-        #map {
-            width: 300px;
-            height: 300px;
-        }
-        
-        input[list="selCity"] {
-            width: 12em;
-            border: none;
-            background: #eee;
-        }
-        
-        select {
-            width: 12em;
-            margin: 0;
-            margin-left: -12.75em;
-        }
-    </style>
 </head>
 
 
 <body>
 
-    <h1>Let me know where you're going:</h1>
+    <header class="container-fluid hero mb-3">
+        <h1 class="text-uppercase">Go get your bike</h1>
+    </header>
 
-    <button type="button" value="americas" id="america" class="selBtn">America</button>
-    <button type="button" value="europe" id="europe" class="selBtn">Europe</button>
+
+    <div class="row flex-items-xs-center mb-0">
+        <article class="col-sm-10 col-md-10 col-lg-12 p-1">
+
+            <h3 class="text-xs-center mb-1">Are you about to go travel and love exploring your destinations by bike?</h3>
+            <p class="text-xs-center ">I love traveling and I love biking so I have set up a app to make it easy to know if I can combine my passions at the places I visit</p>
+            <p class="text-xs-center">To get started just choose if you're going to stay in Europe or if you're crossing the Atlantic:</p>
+        </article>
+    </div>
+
+    <div class="row flex-items-xs-center mt-0 mb-1">
+        <div class="col-xs-10 col-sm-4 col-lg-3 p-1">
+            <button type="button" value="americas" id="america" class="btn btn-info">America</button>
+        </div>
+        <div class="col-xs-10 col-sm-4 col-lg-3 p-1">
+            <button type="button" value="europe" id="europe" class="btn btn-info">Europe</button>
+        </div>
+    </div>
 
 
-    <h3>Select a city below in <span id="selContinents"></span> that offers bikes and you will receive a map of all stations where you can go and get your bike:</h3>
-    <!--<select id="selCity" name="selCityElem"> </select>-->
-    <input list="selCity" id="input" name="selCity" type="text" value="">
-    <!--onchange="BikeMap.getBikeDetails()"-->
-    <label for="selCity">
+
+    <div class="row flex-items-xs-center mb-0">
+        <article class="col-sm-10 col-md-11 col-lg-12 p-1">
+
+            <span id="selContinents" class="text-xs-center mb-1"></span>
+            <p class="text-xs-center"><span id="selCityInfo">To be able to select a city you need to choose what continent your traveling to.</span></p>
+
+        </article>
+    </div>
+
+    <div class="row flex-items-xs-center mb-1">
+        <input list="selCity" id="input" name="selCity" type="text" value="">
+        <!--onchange="BikeMap.getBikeDetails()"-->
+        <label for="selCity">
     <datalist id="selCity">
        
         <select id="options" onchange="BikeMap.getBikeDetails()">
@@ -55,17 +60,25 @@
         
     </datalist>
  </label>
-    <div id="mapContainer">
-        <div id="map" class="bikeMap"></div>
     </div>
 
 
-    <script type="text/javascript " src="script.js "></script>
+    <div class="row flex-items-xs-center">
+        <figure id="map" class="col-xs-8 col-sm-10 col-lg-6"></figure>
+    </div>
 
 
+
+
+
+    <footer class="row p-3 flex-items-xs-center">
+        <div class="col-xs-12 col-sm-10 col-lg-10 p-2 flex-items-xs-center">
+            <p class="text-xs-center">&copy; 2017 Joanna Högberg</p>
+            <p class="text-xs-center"><a href="mailto:joanna.hogberg@gmail.com" title="Send me an email">joanna.hogberg@gmail.com</a></p>
+        </div>
+    </footer>
+    <script type="text/javascript" src="js/script.js "></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-
-
 
 </body>
 

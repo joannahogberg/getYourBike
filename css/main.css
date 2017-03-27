@@ -1,0 +1,33 @@
+header {
+    background-image: url("../pics/yellowBikes.jpg");
+    display: flex;
+    background-attachment: fixed;
+    background-color: rgba(0, 0, 0, 0.4);
+    background-blend-mode: overlay;
+    height: 350px;
+    align-items: center;
+    justify-content: center;
+    color: ghostwhite;
+}
+
+.btn {
+    text-align: center;
+    width: 100%;
+}
+
+#map {
+    /*width: 80%;*/
+    height: 400px;
+}
+
+input[list="selCity"] {
+    width: 12em;
+    border: none;
+    background: #eee;
+}
+
+select {
+    width: 12.5em;
+    margin: 0;
+    margin-left: -12em;
+}

@@ -4,8 +4,13 @@
 
 const BikeMap = (function() {
 
-    document.getElementById("selContinents").innerHTML = "?";
+    // document.getElementById("selContinents").innerHTML = "";
+    let selContElem = document.getElementById("selContinents");
+    let selCityInfo = document.getElementById("selCityInfo");
+
     let inputElem = document.getElementById("input");
+    let selElem = document.getElementById("options");
+
 
     const url = 'https://api.citybik.es/v2/networks';
     let myLatLng;
@@ -17,6 +22,7 @@ const BikeMap = (function() {
     $(document).ready(function() {
         $('#europe').click(function() {
             // alert($(this).attr("value"));
+
             let value = $(this).attr("value");
             BikeMap.getCities($(this).attr("value"))
                 // BikeMap.getCities(value);
@@ -26,6 +32,7 @@ const BikeMap = (function() {
     $(document).ready(function() {
         $('#america').click(function() {
             // alert($(this).attr("value"));
+
             let value = $(this).attr("value");
             BikeMap.getCities($(this).attr("value"))
                 // BikeMap.getCities(value);
@@ -51,11 +58,13 @@ const BikeMap = (function() {
 
         getCities: (value) => {
 
-            if (value == "americas") {
-                document.getElementById("selContinents").innerHTML = "North and South America";
 
+            if (value == "americas") {
+                selContElem.innerHTML = "<h4>Awesome! I'd love traveling to North or South America :)</h4> <p>Below you can select among the cities that offer bikes and a map will show with all stations where you can</p><h5>goGetYourBike</h5>";
+                selCityInfo.innerHTML = "";
             } else {
-                document.getElementById("selContinents").innerHTML = "Europe";
+                selContElem.innerHTML = "<h4>Europe sounds real nice!</h4> <p>Below you can select among the cities that offer bikes and a map will show with all stations where you can</p><h5>goGetYourBike</h5>";
+                selCityInfo.innerHTML = "";
 
             }
 
@@ -63,9 +72,11 @@ const BikeMap = (function() {
             $.get("https://restcountries.eu/rest/v2/region/" + value, (country) => {
                     // console.log(country);
                     console.log("success");
+
                 })
                 .done(function(country) {
                     console.log("finished");
+
                     for (prop in country) {
                         // console.log(country[prop].alpha2Code);
                         countries.push(country[prop].alpha2Code);
@@ -76,6 +87,7 @@ const BikeMap = (function() {
                     $('input[type=text]').attr('placeholder', 'Could not load cities :(');
                 }).always(function() {
                     console.log("finished");
+
                 });
 
         },
@@ -83,7 +95,7 @@ const BikeMap = (function() {
         // appendList: (countries) => {
         appendList: () => {
 
-            // console.log(countries);
+
 
             // Call to CityBikes API with callback function. Returns all bikeNetwork objects in JSON format
             $.get(url, (companies) => {
@@ -96,12 +108,17 @@ const BikeMap = (function() {
                     console.log("finished");
                     console.log(companies);
 
-                    $('input[type=text]').attr('placeholder', 'Select city from list');
+                    // $('input[type=text]').attr('placeholder', 'Select city from list');
                     BikeNetwork = companies;
 
+
+                    // Hide and disable select input here
+
                     // let selCityElem = document.getElementById("selCity");
-                    let selCityElem = document.getElementById("options");
-                    selCityElem.innerHTML = "";
+                    // let selCityElem = document.getElementById("options");
+                    // let selElem = document.getElementById("options");
+                    // selCityElem.innerHTML = "";
+                    selElem.innerHTML = "";
                     for (prop in companies) {
 
                         const arr = companies[prop];
@@ -113,11 +130,10 @@ const BikeMap = (function() {
                             //jQuery utility function to find whether an element exist in array or not
                             if ($.inArray(code, countries) != -1) {
 
+                                selElem.innerHTML += `<option value="${location.city}" label="${location.city}">${arr[i].id}</option>`;
                                 //Sets the select option values to each city's name 
-                                selCityElem.innerHTML += `<option value="${location.city}" label="${location.city}">${arr[i].id}</option>`;
+                                // selElem.innerHTML += `<option value="${location.city}" label="${location.city}">${arr[i].id}</option>`;
                             }
-
-
                         }
 
 
@@ -145,6 +161,7 @@ const BikeMap = (function() {
                         $('#options').sort_select_box();
 
                     }
+
                 })
                 .fail(function() {
                     console.log("error");
@@ -178,11 +195,14 @@ const BikeMap = (function() {
 
             let lat;
             let lng;
+            let id;
             for (prop in BikeNetwork) {
                 let arr = BikeNetwork[prop];
 
                 for (let i = 0; i < arr.length; i++) {
+
                     if (arr[i].location.city == selCityId) {
+
                         lat = arr[i].location.latitude;
                         lng = arr[i].location.longitude;
                         // console.log(lat, lng);
@@ -395,6 +415,7 @@ const BikeMap = (function() {
         deleteVal: () => {
 
             inputElem.value = "";
+
 
         },
 
