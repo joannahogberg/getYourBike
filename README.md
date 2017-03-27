@@ -34,11 +34,12 @@ The app uses jQuery get() Method with the Promise interface to load data from th
 #### My ToDo list 
 
 
+*********
 
-* By: Joanna Högberg
-* Course: Javascript 2
-* Class: Fend16
-* Program: Front-End Developer at Nackademin
+By: Joanna Högberg
+Course: Javascript 2
+Class: Fend16
+Program: Front-End Developer at Nackademin
 
 
 
