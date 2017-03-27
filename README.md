@@ -1,4 +1,7 @@
-# getYouBike
+# AJAX Assignment - Open APIs
+
+
+## getYouBike
 
 Application to display pick-up stations for bikes in selected city https://joannahogberg.github.io/getYourBike/
 
@@ -19,6 +22,24 @@ The app uses jQuery get() Method with the Promise interface to load data from th
 3. The third call is made to the  https://api.citybik.es/v2/networks/ filtered on selected city's id to get the positioning of each station.
 4. The last api used is https://maps.googleapis.com/maps/api/ which responds with a json callback function from googlemaps. 
 
+#### Technologies
+
+* jQuery get() Method with the Promise interface
+* Bootstrap 4 with flex-box layout
+* Revealing Module Pattern to structure JS code
+* jQuery/VanillaJS
+* HTML/CSS
 
 
 #### My ToDo list 
+
+
+
+* By: Joanna Högberg
+* Course: Javascript 2
+* Class: Fend16
+* Program: Front-End Developer at Nackademin
+
+
+
+
