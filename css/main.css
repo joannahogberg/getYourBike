@@ -1,10 +1,10 @@
 header {
-    background-image: url("../pics/yellowBikes.jpg");
+    background-image: url("../pics/background.jpg");
     display: flex;
     background-attachment: fixed;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.3);
     background-blend-mode: overlay;
-    height: 350px;
+    height: 250px;
     align-items: center;
     justify-content: center;
     color: ghostwhite;
@@ -16,7 +16,6 @@ header {
 }
 
 #map {
-    /*width: 80%;*/
     height: 400px;
 }
 
