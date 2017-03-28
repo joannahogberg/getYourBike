@@ -19,6 +19,11 @@ header {
     height: 400px;
 }
 
+
+/*#loader {
+    height: 250px;
+}*/
+
 input[list="selCity"] {
     width: 12em;
     border: none;

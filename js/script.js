@@ -1,20 +1,28 @@
 'Use strict'
 
-
+/*
+Module Pattern 
+github: https://github.com/joannahogberg/getYourBike
+link: https://joannahogberg.github.io/getYourBike/
+*/
 
 const BikeMap = (function() {
 
-    // document.getElementById("selContinents").innerHTML = "";
+    //Variable declarations for html elements
     let selContElem = document.getElementById("selContinents");
     let selCityInfo = document.getElementById("selCityInfo");
-
+    let datalist = document.getElementById("selCity");
+    let loader = document.getElementById("loader");
     let inputElem = document.getElementById("input");
     let selElem = document.getElementById("options");
 
-
-    const url = 'https://api.citybik.es/v2/networks';
+    //Variable declaration 
     let myLatLng;
     let BikeNetwork = [];
+
+    //Url link to citybik API
+    const url = 'https://api.citybik.es/v2/networks';
+
 
 
 
@@ -22,21 +30,58 @@ const BikeMap = (function() {
     $(document).ready(function() {
         $('#europe').click(function() {
             // alert($(this).attr("value"));
-
             let value = $(this).attr("value");
-            BikeMap.getCities($(this).attr("value"))
-                // BikeMap.getCities(value);
-                // alert(value)
+            // if (selElem.length > 0) {
+            //     BikeMap.clearOptions();
+
+            //     BikeMap.getCities($(this).attr("value"))
+            // } else {
+            //     BikeMap.getCities($(this).attr("value"))
+            // }
+            if (selElem.length > 0) {
+                BikeMap.clearOptions(value);
+                // BikeMap.getCities($(this).attr("value"))
+            } else {
+                // BikeMap.getCities($(this).attr("value"))
+                BikeMap.getCities(value)
+            }
+
+            // let value = $(this).attr("value");
+            // BikeMap.getCities($(this).attr("value"))
+            // BikeMap.getCities(value);
+            // alert(value)
         });
     });
     $(document).ready(function() {
         $('#america').click(function() {
-            // alert($(this).attr("value"));
 
             let value = $(this).attr("value");
-            BikeMap.getCities($(this).attr("value"))
-                // BikeMap.getCities(value);
-                // alert(value)
+            // alert($(this).attr("value"));
+            // if (selElem.length > 0) {
+            //     // console.log(selElem.options);
+            //     // selElem.remove(selElem.length);
+            //     // for (let i = 0; i < selElem.length; i++) {
+            //     //     selElem.remove(selElem.length[i])
+            //     // }
+
+            //     var length = selElem.options.length;
+            //     for (i = 0; i < length; i++) {
+            //         selElem.options[i] = null;
+            //     }
+            // }
+
+            // let value = $(this).attr("value");
+            // BikeMap.getCities($(this).attr("value"))
+            // BikeMap.getCities(value);
+            // alert(value)
+            if (selElem.length > 0) {
+                BikeMap.clearOptions(value);
+                // BikeMap.getCities($(this).attr("value"))
+            } else {
+                // BikeMap.getCities($(this).attr("value"))
+                BikeMap.getCities(value)
+            }
+
 
         });
     });
@@ -44,7 +89,7 @@ const BikeMap = (function() {
 
 
 
-    // Google map call to define google
+    // Google map call which responds with a json callback function from googlemaps
     $.ajax({
         url: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCpCilSrre3u5TACGa1XjkVHCWGiBDZZ5o&callback=?',
         dataType: 'json',
@@ -56,17 +101,13 @@ const BikeMap = (function() {
 
     return {
 
+        /**
+         * Function with jQuery.get() request to load data from API
+         * @param {String}         Continents value 
+         */
+
         getCities: (value) => {
 
-
-            if (value == "americas") {
-                selContElem.innerHTML = "<h4>Awesome! I'd love traveling to North or South America :)</h4> <p>Below you can select among the cities that offer bikes and a map will show with all stations where you can</p><h5>goGetYourBike</h5>";
-                selCityInfo.innerHTML = "";
-            } else {
-                selContElem.innerHTML = "<h4>Europe sounds real nice!</h4> <p>Below you can select among the cities that offer bikes and a map will show with all stations where you can</p><h5>goGetYourBike</h5>";
-                selCityInfo.innerHTML = "";
-
-            }
 
             // Call to RESTful COUNTRIES API with callback function that returns objects in JSON format. 
             $.get("https://restcountries.eu/rest/v2/region/" + value, (country) => {
@@ -76,12 +117,15 @@ const BikeMap = (function() {
                 })
                 .done(function(country) {
                     console.log("finished");
-
+                    selContElem.innerHTML = "";
+                    selCityInfo.innerHTML = "Please wait while information is loading";
+                    loader.src = 'pics/loader.gif';
+                    loader.style.height = '250px';
                     for (prop in country) {
                         // console.log(country[prop].alpha2Code);
                         countries.push(country[prop].alpha2Code);
                     }
-                    BikeMap.appendList();
+                    BikeMap.appendList(value);
                 }).fail(function() {
                     console.log("error");
                     $('input[type=text]').attr('placeholder', 'Could not load cities :(');
@@ -93,31 +137,34 @@ const BikeMap = (function() {
         },
 
         // appendList: (countries) => {
-        appendList: () => {
-
+        appendList: (value) => {
 
 
             // Call to CityBikes API with callback function. Returns all bikeNetwork objects in JSON format
             $.get(url, (companies) => {
 
-
-                    // console.log(country);
-                    console.log("success");
+                    // console.log("success");
                 })
                 .done(function(companies) {
-                    console.log("finished");
-                    console.log(companies);
+                    // console.log("finished");
+                    // console.log(companies);
+                    //  BikeNetwork = companies;
+                    //Remove loader when call is done
+                    loader.src = '';
+                    loader.style.height = '0';
 
-                    // $('input[type=text]').attr('placeholder', 'Select city from list');
-                    BikeNetwork = companies;
 
+                    if (value == "americas") {
+                        selContElem.innerHTML = "<h4>Awesome! I'd love traveling to North or South America :)</h4> <p>Below you can select among the cities that offer bikes and a map will show with all stations where you can</p><h5>goGetYourBike</h5>";
+                        selCityInfo.innerHTML = "";
 
-                    // Hide and disable select input here
+                    } else {
+                        selContElem.innerHTML = "<h4>Europe sounds real nice!</h4> <p>Below you can select among the cities that offer bikes and a map will show with all stations where you can</p><h5>goGetYourBike</h5>";
+                        selCityInfo.innerHTML = "";
 
-                    // let selCityElem = document.getElementById("selCity");
-                    // let selCityElem = document.getElementById("options");
-                    // let selElem = document.getElementById("options");
-                    // selCityElem.innerHTML = "";
+                    }
+
+                    //Clear selElem before adding new options
                     selElem.innerHTML = "";
                     for (prop in companies) {
 
@@ -161,6 +208,7 @@ const BikeMap = (function() {
                         $('#options').sort_select_box();
 
                     }
+                    document.getElementById("input").addEventListener("change", BikeMap.getBikeDetails);
 
                 })
                 .fail(function() {
@@ -170,7 +218,92 @@ const BikeMap = (function() {
                 .always(function() {
                     console.log("finished");
                 });
+            // document.getElementById("input").addEventListener("change", BikeMap.getBikeDetails);
 
+        },
+        clearOptions: (continent) => {
+
+            // alert("hej");
+            // console.log(continent)
+            // // if ($('#options').has('option')) {
+            // $('select option').remove();
+            // // } else {
+
+            // selElem.innerHTML = '<option disabled></option>';
+            // }
+            // console.log(selElem);
+
+            // while (selElem.hasChildNodes()) {
+
+            //     console.log(selElem.firstChild)
+            //     selElem.removeChild(selElem.firstChild);
+            //     console.log("hello")
+            // }
+            // for (let i = 0; i < selElem.options.length; i++) {
+            //     console.log(selElem.options[i])
+            //     selElem.remove(selElem.options[i])
+            // }
+
+
+            BikeMap.getCities(continent);
+            // if (selElem.length > 0) {
+
+            //     while (selElem.hasChildNodes()) {
+            //         selElem.removeChild(selElem.firstChild);
+
+            //     }
+            // var childArray = selElem.children;
+            // if (childArray.length > 0) {
+            //     for (let i = 0; i < childArray.length; i++) {
+            //         // datalist.remove(selElem.options[i])
+            //         console.log(childArray[i]);
+            //         selElem.removeChild(childArray[i])
+
+            //     }
+            // selElem.removeChild(childArray[2])
+
+            // }
+            // console.log(selElem.options);
+            // for (let i = 0; i < selElem.options.length; i++) {
+            //     datalist.remove(selElem.options[i])
+            //     console.log(selElem.options[i]);
+            // }
+            // datalist.remove(selElem.options);
+            // selElem.remove(selElem.length);
+            // for (let i = 0; i < selElem.options.length; i++) {
+            //     selElem.remove(selElem.options[i])
+            // }
+            // }
+            // console.log(selElem);
+
+
+            // var childArray = selElem.children;
+            // if (childArray.length > 0) {
+            //     selElem.removeChild(childArray)
+
+            // }
+
+
+
+            // $('#options').empty();
+
+            // console.log(selElem);
+            // for (let i = 0; i < selElem.options.length; i++) {
+            //     console.log(selElem.options[i]);
+            //     selElem.options[i] = null;
+            //     // selElem.remove(selElem[i]);
+            //     // $('select option').remove(selElem[i]);
+
+            // }
+
+
+
+            // for (i = 0; i < length; i++) {
+            //     console.log(selElem.options[i]);
+            //     selElem.options[i] = null;
+            // }
+
+            // console.log(selElem);
         },
 
 
@@ -218,197 +351,212 @@ const BikeMap = (function() {
 
         },
 
-
+        //Function to 
         initMap: (selCityStations) => {
 
 
             // alert(selCityStations);
             $.get(url + '/' + selCityStations, (response) => {
-                console.log("stations", response);
-                let locations = [];
-                for (prop in response) {
 
-                    const stations = response[prop].stations;
-                    for (let i = 0; i < stations.length; i++) {
-                        locations.push([stations[i].latitude, stations[i].longitude, stations[i].name, stations[i].free_bikes]);
 
-                    }
-                }
+                    // console.log("success");
+                })
+                .done(function(response) {
 
-                var styledMapType = new google.maps.StyledMapType(
-                    [{
-                            "elementType": "geometry",
-                            "stylers": [{
-                                "color": "#f5f5f5"
-                            }]
-                        },
-                        {
-                            "elementType": "labels.icon",
-                            "stylers": [{
-                                "visibility": "off"
-                            }]
-                        },
-                        {
-                            "elementType": "labels.text.fill",
-                            "stylers": [{
-                                "color": "#616161"
-                            }]
-                        },
-                        {
-                            "elementType": "labels.text.stroke",
-                            "stylers": [{
-                                "color": "#f5f5f5"
-                            }]
-                        },
-                        {
-                            "featureType": "administrative.land_parcel",
-                            "elementType": "labels.text.fill",
-                            "stylers": [{
-                                "color": "#bdbdbd"
-                            }]
-                        },
-                        {
-                            "featureType": "poi",
-                            "elementType": "geometry",
-                            "stylers": [{
-                                "color": "#eeeeee"
-                            }]
-                        },
-                        {
-                            "featureType": "poi",
-                            "elementType": "labels.text.fill",
-                            "stylers": [{
-                                "color": "#757575"
-                            }]
-                        },
-                        {
-                            "featureType": "poi.park",
-                            "elementType": "geometry",
-                            "stylers": [{
-                                "color": "#e5e5e5"
-                            }]
-                        },
-                        {
-                            "featureType": "poi.park",
-                            "elementType": "labels.text.fill",
-                            "stylers": [{
-                                "color": "#9e9e9e"
-                            }]
-                        },
-                        {
-                            "featureType": "road",
-                            "elementType": "geometry",
-                            "stylers": [{
-                                "color": "#ffffff"
-                            }]
-                        },
-                        {
-                            "featureType": "road.arterial",
-                            "elementType": "labels.text.fill",
-                            "stylers": [{
-                                "color": "#757575"
-                            }]
-                        },
-                        {
-                            "featureType": "road.highway",
-                            "elementType": "geometry",
-                            "stylers": [{
-                                "color": "#dadada"
-                            }]
-                        },
-                        {
-                            "featureType": "road.highway",
-                            "elementType": "labels.text.fill",
-                            "stylers": [{
-                                "color": "#616161"
-                            }]
-                        },
-                        {
-                            "featureType": "road.local",
-                            "elementType": "labels.text.fill",
-                            "stylers": [{
-                                "color": "#9e9e9e"
-                            }]
-                        },
-                        {
-                            "featureType": "transit.line",
-                            "elementType": "geometry",
-                            "stylers": [{
-                                "color": "#e5e5e5"
-                            }]
-                        },
-                        {
-                            "featureType": "transit.station",
-                            "elementType": "geometry",
-                            "stylers": [{
-                                "color": "#eeeeee"
-                            }]
-                        },
-                        {
-                            "featureType": "water",
-                            "elementType": "geometry",
-                            "stylers": [{
-                                "color": "#c9c9c9"
-                            }]
-                        },
-                        {
-                            "featureType": "water",
-                            "elementType": "labels.text.fill",
-                            "stylers": [{
-                                "color": "#9e9e9e"
-                            }]
+
+
+                    console.log("stations", response);
+                    let locations = [];
+                    for (prop in response) {
+
+                        const stations = response[prop].stations;
+                        for (let i = 0; i < stations.length; i++) {
+                            locations.push([stations[i].latitude, stations[i].longitude, stations[i].name, stations[i].free_bikes]);
+
                         }
-                    ], {
-                        name: 'Styled Map'
+                    }
+                    //Styling for map
+                    var styledMapType = new google.maps.StyledMapType(
+                        [{
+                                "elementType": "geometry",
+                                "stylers": [{
+                                    "color": "#f5f5f5"
+                                }]
+                            },
+                            {
+                                "elementType": "labels.icon",
+                                "stylers": [{
+                                    "visibility": "off"
+                                }]
+                            },
+                            {
+                                "elementType": "labels.text.fill",
+                                "stylers": [{
+                                    "color": "#616161"
+                                }]
+                            },
+                            {
+                                "elementType": "labels.text.stroke",
+                                "stylers": [{
+                                    "color": "#f5f5f5"
+                                }]
+                            },
+                            {
+                                "featureType": "administrative.land_parcel",
+                                "elementType": "labels.text.fill",
+                                "stylers": [{
+                                    "color": "#bdbdbd"
+                                }]
+                            },
+                            {
+                                "featureType": "poi",
+                                "elementType": "geometry",
+                                "stylers": [{
+                                    "color": "#eeeeee"
+                                }]
+                            },
+                            {
+                                "featureType": "poi",
+                                "elementType": "labels.text.fill",
+                                "stylers": [{
+                                    "color": "#757575"
+                                }]
+                            },
+                            {
+                                "featureType": "poi.park",
+                                "elementType": "geometry",
+                                "stylers": [{
+                                    "color": "#e5e5e5"
+                                }]
+                            },
+                            {
+                                "featureType": "poi.park",
+                                "elementType": "labels.text.fill",
+                                "stylers": [{
+                                    "color": "#9e9e9e"
+                                }]
+                            },
+                            {
+                                "featureType": "road",
+                                "elementType": "geometry",
+                                "stylers": [{
+                                    "color": "#ffffff"
+                                }]
+                            },
+                            {
+                                "featureType": "road.arterial",
+                                "elementType": "labels.text.fill",
+                                "stylers": [{
+                                    "color": "#757575"
+                                }]
+                            },
+                            {
+                                "featureType": "road.highway",
+                                "elementType": "geometry",
+                                "stylers": [{
+                                    "color": "#dadada"
+                                }]
+                            },
+                            {
+                                "featureType": "road.highway",
+                                "elementType": "labels.text.fill",
+                                "stylers": [{
+                                    "color": "#616161"
+                                }]
+                            },
+                            {
+                                "featureType": "road.local",
+                                "elementType": "labels.text.fill",
+                                "stylers": [{
+                                    "color": "#9e9e9e"
+                                }]
+                            },
+                            {
+                                "featureType": "transit.line",
+                                "elementType": "geometry",
+                                "stylers": [{
+                                    "color": "#e5e5e5"
+                                }]
+                            },
+                            {
+                                "featureType": "transit.station",
+                                "elementType": "geometry",
+                                "stylers": [{
+                                    "color": "#eeeeee"
+                                }]
+                            },
+                            {
+                                "featureType": "water",
+                                "elementType": "geometry",
+                                "stylers": [{
+                                    "color": "#c9c9c9"
+                                }]
+                            },
+                            {
+                                "featureType": "water",
+                                "elementType": "labels.text.fill",
+                                "stylers": [{
+                                    "color": "#9e9e9e"
+                                }]
+                            }
+                        ], {
+                            name: 'Styled Map'
+                        });
+
+
+                    var bounds = new google.maps.LatLngBounds();
+                    // Displays a map in the map element
+                    var map = new google.maps.Map(document.getElementById('map'), {
+                        zoom: 14,
+                        center: myLatLng,
+
+                        mapTypeControlOptions: {
+                            mapTypeIds: ['roadmap', 'satellite', 'hybrid',
+                                'styled_map'
+                            ]
+                        }
+
                     });
 
 
-                var bounds = new google.maps.LatLngBounds();
-                // Displays a map in the map element
-                var map = new google.maps.Map(document.getElementById('map'), {
-                    zoom: 14,
-                    center: myLatLng,
+                    //Associate the styled map with the MapTypeId and set it to display.
+                    map.mapTypes.set('styled_map', styledMapType);
+                    map.setMapTypeId('styled_map');
 
-                    mapTypeControlOptions: {
-                        mapTypeIds: ['roadmap', 'satellite', 'hybrid',
-                            'styled_map'
-                        ]
+                    var infowindow = new google.maps.InfoWindow(),
+                        marker;
+
+                    // Display multiple markers on a map
+                    for (var i = 0; i < locations.length; i++) {
+                        // console.log(locations[i])
+                        var position = new google.maps.LatLng(locations[i][0], locations[i][1]);
+                        bounds.extend(position);
+                        marker = new google.maps.Marker({
+                            position: position,
+                            map: map
+                        });
+                        // Attaches an info window to a marker with the provided message. When the
+                        // marker is clicked, the info window will open with the set values.
+                        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+
+                            return function() {
+                                infowindow.setContent("Get your bike at: " + locations[i][2] + "<br> Bikes available: " + locations[i][3]);
+                                infowindow.open(map, marker);
+                            }
+                        })(marker, i));
+
                     }
+                    // Automatically center the map fitting all markers on the map screen
+                    map.fitBounds(bounds);
+
+                })
+                .fail(function() {
+                    alert("error");
+                })
+                .always(function() {
+                    console.log("finished");
 
                 });
-
-
-                //Associate the styled map with the MapTypeId and set it to display.
-                map.mapTypes.set('styled_map', styledMapType);
-                map.setMapTypeId('styled_map');
-
-                var infowindow = new google.maps.InfoWindow(),
-                    marker;
-
-                // Display multiple markers on a map
-                for (var i = 0; i < locations.length; i++) {
-                    console.log(locations[i])
-                    var position = new google.maps.LatLng(locations[i][0], locations[i][1]);
-                    bounds.extend(position);
-                    marker = new google.maps.Marker({
-                        position: position,
-                        map: map
-                    });
-                    // Attaches an info window to a marker with the provided message. When the
-                    // marker is clicked, the info window will open with the set values.
-                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
-
-                        return function() {
-                            infowindow.setContent("Get your bike at: " + locations[i][2] + "<br> Bikes available: " + locations[i][3]);
-                            infowindow.open(map, marker);
-                        }
-                    })(marker, i));
-
-                }
-                // Automatically center the map fitting all markers on the map screen
-                map.fitBounds(bounds);
-
-            });
             document.getElementById("input").addEventListener("click", BikeMap.deleteVal);
         },
         //Clear the input field when clicked
@@ -417,16 +565,16 @@ const BikeMap = (function() {
             inputElem.value = "";
 
 
-        },
-
-        init: () => {
-
-            document.getElementById("input").addEventListener("change", BikeMap.getBikeDetails);
-
         }
+
+        // init: () => {
+
+        //     // document.getElementById("input").addEventListener("change", BikeMap.getBikeDetails);
+
+        // }
     }
 
 })();
 
 
-BikeMap.init();
+// BikeMap.init();
