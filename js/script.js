@@ -15,18 +15,21 @@ const BikeMap = (function() {
     let loader = document.getElementById("loader");
     let inputElem = document.getElementById("input");
     let selElem = document.getElementById("options");
+    selElem.innerHTML = "";
 
     //Variable declaration 
     let myLatLng;
     let BikeNetwork = [];
+    let countries = [];
 
     //Url link to citybik API
     const url = 'https://api.citybik.es/v2/networks';
 
 
-
-
-    //Get the value of clicked button using jquery and call BikeMap.getCities with parameter value
+    /**
+     * Functions for buttons that loads when window is ready
+     * Get the value of clicked button using jquery and call BikeMap.getCities with parameter value
+     */
     $(document).ready(function() {
         $('#europe').click(function() {
             // alert($(this).attr("value"));
@@ -97,7 +100,7 @@ const BikeMap = (function() {
     })
 
 
-    let countries = [];
+
 
     return {
 
@@ -123,12 +126,14 @@ const BikeMap = (function() {
                     loader.style.height = '250px';
                     for (prop in country) {
                         // console.log(country[prop].alpha2Code);
+                        //Push the country code for each country in selected continent to countries array
                         countries.push(country[prop].alpha2Code);
                     }
+                    //Call to appendList with parameter value
                     BikeMap.appendList(value);
                 }).fail(function() {
                     console.log("error");
-                    $('input[type=text]').attr('placeholder', 'Could not load cities :(');
+                    selCityInfo.innerHTML = "Seems like there is something wrong with your connection :( Please try reloading the page.";
                 }).always(function() {
                     console.log("finished");
 
@@ -136,30 +141,32 @@ const BikeMap = (function() {
 
         },
 
-        // appendList: (countries) => {
+        /**
+         * Function with jQuery.get() request to load data from API and append to interface
+         * @param {String}         Continents value 
+         */
+
         appendList: (value) => {
 
 
             // Call to CityBikes API with callback function. Returns all bikeNetwork objects in JSON format
             $.get(url, (companies) => {
 
-                    // console.log("success");
+                    console.log("success");
                 })
                 .done(function(companies) {
-                    // console.log("finished");
-                    // console.log(companies);
-                    //  BikeNetwork = companies;
+                    console.log("finished");
                     //Remove loader when call is done
                     loader.src = '';
                     loader.style.height = '0';
 
-
+                    //Check value for selected continent and apply matching text to interface
                     if (value == "americas") {
-                        selContElem.innerHTML = "<h4>Awesome! I'd love traveling to North or South America :)</h4> <p>Below you can select among the cities that offer bikes and a map will show with all stations where you can</p><h5>goGetYourBike</h5>";
+                        selContElem.innerHTML = "<h4>Awesome! I'd love traveling to North or South America :)</h4> <p>Below you can search/select among the cities that offer bikes and a map will show with all stations where you can</p><h5>goGetYourBike</h5>";
                         selCityInfo.innerHTML = "";
 
                     } else {
-                        selContElem.innerHTML = "<h4>Europe sounds real nice!</h4> <p>Below you can select among the cities that offer bikes and a map will show with all stations where you can</p><h5>goGetYourBike</h5>";
+                        selContElem.innerHTML = "<h4>Europe sounds real nice!</h4> <p>Below you can search/select among the cities that offer bikes and a map will show with all stations where you can</p><h5>goGetYourBike</h5>";
                         selCityInfo.innerHTML = "";
 
                     }
@@ -176,7 +183,7 @@ const BikeMap = (function() {
                             let code = location.country;
                             //jQuery utility function to find whether an element exist in array or not
                             if ($.inArray(code, countries) != -1) {
-
+                                //Set option values
                                 selElem.innerHTML += `<option value="${location.city}" label="${location.city}">${arr[i].id}</option>`;
                                 //Sets the select option values to each city's name 
                                 // selElem.innerHTML += `<option value="${location.city}" label="${location.city}">${arr[i].id}</option>`;
@@ -306,7 +313,9 @@ const BikeMap = (function() {
             // console.log(selElem);
         },
 
-
+        /**
+         * Function to push new latitude and longitude values for selected city into myLatLng array
+         */
         getBikeDetails: () => {
 
             //Get value from selected option for Safari
@@ -319,7 +328,6 @@ const BikeMap = (function() {
                 if (document.getElementById('options').options[i].value == document.getElementsByName("selCity")[0].value) {
                     // alert(document.getElementById('options').options[i].value);
                     selCityId = document.getElementById('options').options[i].text;
-
                     break;
                 }
             }
@@ -328,14 +336,13 @@ const BikeMap = (function() {
 
             let lat;
             let lng;
-            let id;
             for (prop in BikeNetwork) {
                 let arr = BikeNetwork[prop];
 
                 for (let i = 0; i < arr.length; i++) {
 
                     if (arr[i].location.city == selCityId) {
-
+                        //Get latitude and longitude for selected city and push values into array
                         lat = arr[i].location.latitude;
                         lng = arr[i].location.longitude;
                         // console.log(lat, lng);
@@ -344,14 +351,18 @@ const BikeMap = (function() {
                 }
 
             }
-
+            //Call initMap function with parameter of selected city id
             BikeMap.initMap(selCityId);
 
 
 
         },
 
-        //Function to 
+        /**
+         * Function with jQuery get() method call to the CityBikes API and then add a styled map to
+         * interface with markers for all stations in selected city.
+         * @param {String}         id for selected city
+         */
         initMap: (selCityStations) => {
 
 
