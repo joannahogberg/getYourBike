@@ -34,57 +34,14 @@ const BikeMap = (function() {
         $('#europe').click(function() {
             // alert($(this).attr("value"));
             let value = $(this).attr("value");
-            // if (selElem.length > 0) {
-            //     BikeMap.clearOptions();
+            BikeMap.getCities(value)
 
-            //     BikeMap.getCities($(this).attr("value"))
-            // } else {
-            //     BikeMap.getCities($(this).attr("value"))
-            // }
-            if (selElem.length > 0) {
-                BikeMap.clearOptions(value);
-                // BikeMap.getCities($(this).attr("value"))
-            } else {
-                // BikeMap.getCities($(this).attr("value"))
-                BikeMap.getCities(value)
-            }
-
-            // let value = $(this).attr("value");
-            // BikeMap.getCities($(this).attr("value"))
-            // BikeMap.getCities(value);
-            // alert(value)
         });
     });
     $(document).ready(function() {
         $('#america').click(function() {
-
             let value = $(this).attr("value");
-            // alert($(this).attr("value"));
-            // if (selElem.length > 0) {
-            //     // console.log(selElem.options);
-            //     // selElem.remove(selElem.length);
-            //     // for (let i = 0; i < selElem.length; i++) {
-            //     //     selElem.remove(selElem.length[i])
-            //     // }
-
-            //     var length = selElem.options.length;
-            //     for (i = 0; i < length; i++) {
-            //         selElem.options[i] = null;
-            //     }
-            // }
-
-            // let value = $(this).attr("value");
-            // BikeMap.getCities($(this).attr("value"))
-            // BikeMap.getCities(value);
-            // alert(value)
-            if (selElem.length > 0) {
-                BikeMap.clearOptions(value);
-                // BikeMap.getCities($(this).attr("value"))
-            } else {
-                // BikeMap.getCities($(this).attr("value"))
-                BikeMap.getCities(value)
-            }
-
+            BikeMap.getCities(value)
 
         });
     });
@@ -98,7 +55,6 @@ const BikeMap = (function() {
         dataType: 'json',
         jsonCallback: 'BikeMap'
     })
-
 
 
 
@@ -226,93 +182,10 @@ const BikeMap = (function() {
                 .always(function() {
                     console.log("finished");
                 });
-            // document.getElementById("input").addEventListener("change", BikeMap.getBikeDetails);
+
 
         },
-        clearOptions: (continent) => {
 
-            // alert("hej");
-            // console.log(continent)
-            // // if ($('#options').has('option')) {
-            // $('select option').remove();
-            // // } else {
-
-            // selElem.innerHTML = '<option disabled></option>';
-            // }
-            // console.log(selElem);
-
-            // while (selElem.hasChildNodes()) {
-
-            //     console.log(selElem.firstChild)
-            //     selElem.removeChild(selElem.firstChild);
-            //     console.log("hello")
-            // }
-            // for (let i = 0; i < selElem.options.length; i++) {
-            //     console.log(selElem.options[i])
-            //     selElem.remove(selElem.options[i])
-            // }
-
-
-            BikeMap.getCities(continent);
-            // if (selElem.length > 0) {
-
-            //     while (selElem.hasChildNodes()) {
-            //         selElem.removeChild(selElem.firstChild);
-
-            //     }
-            // var childArray = selElem.children;
-            // if (childArray.length > 0) {
-            //     for (let i = 0; i < childArray.length; i++) {
-            //         // datalist.remove(selElem.options[i])
-            //         console.log(childArray[i]);
-            //         selElem.removeChild(childArray[i])
-
-            //     }
-            // selElem.removeChild(childArray[2])
-
-            // }
-            // console.log(selElem.options);
-            // for (let i = 0; i < selElem.options.length; i++) {
-            //     datalist.remove(selElem.options[i])
-            //     console.log(selElem.options[i]);
-            // }
-            // datalist.remove(selElem.options);
-            // selElem.remove(selElem.length);
-            // for (let i = 0; i < selElem.options.length; i++) {
-            //     selElem.remove(selElem.options[i])
-            // }
-            // }
-            // console.log(selElem);
-
-
-            // var childArray = selElem.children;
-            // if (childArray.length > 0) {
-            //     selElem.removeChild(childArray)
-
-            // }
-
-
-
-            // $('#options').empty();
-
-            // console.log(selElem);
-            // for (let i = 0; i < selElem.options.length; i++) {
-            //     console.log(selElem.options[i]);
-            //     selElem.options[i] = null;
-            //     // selElem.remove(selElem[i]);
-            //     // $('select option').remove(selElem[i]);
-
-            // }
-
-
-
-            // for (i = 0; i < length; i++) {
-            //     console.log(selElem.options[i]);
-            //     selElem.options[i] = null;
-            // }
-
-            // console.log(selElem);
-        },
 
         /**
          * Function to push new latitude and longitude values for selected city into myLatLng array
@@ -579,14 +452,6 @@ const BikeMap = (function() {
 
         }
 
-        // init: () => {
-
-        //     // document.getElementById("input").addEventListener("change", BikeMap.getBikeDetails);
-
-        // }
     }
 
 })();
-
-
-// BikeMap.init();
