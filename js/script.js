@@ -13,6 +13,7 @@ const BikeMap = (function() {
     let selCityInfo = document.getElementById("selCityInfo");
     let datalist = document.getElementById("selCity");
     let loader = document.getElementById("loader");
+    let mapLoader = document.getElementById("mapLoader");
     let inputElem = document.getElementById("input");
     let selElem = document.getElementById("options");
     let mapInfoElem = document.getElementById("mapInfoText");
@@ -248,6 +249,9 @@ const BikeMap = (function() {
          */
         getBikeDetails: () => {
 
+            document.getElementById("map").innerHTML = "";
+            mapLoader.src = 'pics/loader.gif';
+            mapLoader.style.height = '250px';
             //Get value from selected option for Safari
             const x = document.getElementById("options").selectedIndex;
             let selCityId = document.getElementsByTagName("option")[x].text;
@@ -340,10 +344,12 @@ const BikeMap = (function() {
             if (locations.length <= 0) {
                 mapInfoElem.innerHTML = "Unfortunately there are no available bikes in " + city + " at the moment";
 
+
             } else {
 
                 mapInfoElem.innerHTML = "In " + city + ", you are able to find " + locations.length + " bike stations that have available bikes right now!";
-
+                mapLoader.src = '';
+                mapLoader.style.height = '0';
                 //Styling for map
                 var styledMapType = new google.maps.StyledMapType(
                     [{

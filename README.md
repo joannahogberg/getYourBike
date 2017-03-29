@@ -16,7 +16,7 @@ Application to display pick-up stations for bikes in selected city https://joann
 The API's used for this application:
 
 * RESTful Countries API: https://restcountries.eu/rest/v2/region/europe returnes an array of json data objects with information for all countries in Europe. Used to get country codes.
-* CityBikes API: https://api.citybik.es/v2/networks returns an array of json data objects with all companies that are connected to CityBikes.
+* CityBikes API: https://api.citybik.es/v2/ returns an array of json data objects with all companies that are connected to CityBikes.
 * Google Maps API: https://maps.googleapis.com/maps/api/ which responds with a json callback function from googlemaps.
 
 #### Ajax calls 
