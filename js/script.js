@@ -20,7 +20,7 @@ const BikeMap = (function() {
     //Variable declaration 
     let myLatLng;
     let BikeNetwork = [];
-    let countries = [];
+    // let countries = [];
 
     //Url link to citybik API
     const url = 'https://api.citybik.es/v2/networks';
@@ -124,13 +124,14 @@ const BikeMap = (function() {
                     selCityInfo.innerHTML = "Please wait while information is loading";
                     loader.src = 'pics/loader.gif';
                     loader.style.height = '250px';
+                    let countries = [];
                     for (prop in country) {
                         // console.log(country[prop].alpha2Code);
                         //Push the country code for each country in selected continent to countries array
                         countries.push(country[prop].alpha2Code);
                     }
                     //Call to appendList with parameter value
-                    BikeMap.appendList(value);
+                    BikeMap.appendList(value, countries);
                 }).fail(function() {
                     console.log("error");
                     selCityInfo.innerHTML = "Seems like there is something wrong with your connection :( Please try reloading the page.";
@@ -146,7 +147,7 @@ const BikeMap = (function() {
          * @param {String}         Continents value 
          */
 
-        appendList: (value) => {
+        appendList: (value, countries) => {
 
 
             // Call to CityBikes API with callback function. Returns all bikeNetwork objects in JSON format
