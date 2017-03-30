@@ -539,11 +539,7 @@ const BikeMap = (function() {
 
             inputElem.value = "";
 
-
-
-
         }
-
     }
 
 })();
