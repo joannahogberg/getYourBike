@@ -19,7 +19,7 @@ const BikeMap = (function() {
     let mapInfoElem = document.getElementById("mapInfoText");
     selElem.innerHTML = "";
 
-    //Variable declaration 
+    //Global variable declarations
     let myLatLng;
     let BikeNetwork = [];
     let allCompanies;
@@ -32,7 +32,7 @@ const BikeMap = (function() {
 
     /**
      * Functions for buttons that loads when window is ready
-     * Get the value of clicked button using jquery and call BikeMap.getCities with parameter value
+     * Get the value of clicked button using jquery and call BikeMap.getCountryCodes with parameter value
      */
     $(document).ready(function() {
         $('#europe').click(function() {
@@ -101,7 +101,6 @@ const BikeMap = (function() {
 
             let countriesArr = [];
             for (prop in countries) {
-
                 //Push the country code for each country in selected continent to countries array
                 countriesArr.push(countries[prop].alpha2Code);
             }
@@ -119,7 +118,7 @@ const BikeMap = (function() {
         getOptionDetails: (countries) => {
             // alert("hej options")
 
-            // Call to CityBikes API with callback function. Returns all bikeNetwork objects in JSON format
+            // Call to CityBikes API with callback function. Returns an object of all bikeNetworks in JSON format
             $.get(url, (companies) => {
                     BikeNetwork = companies;
                     console.log("success");
@@ -141,11 +140,13 @@ const BikeMap = (function() {
         },
 
 
+        /**
+         * Function that assigns allCompanies with an array with objects of all companies in BikeNetwork   
+         */
         getAllCompanies: () => {
             for (prop in BikeNetwork) {
-
-                allCompanies = BikeNetwork[prop].map(city =>
-                    city)
+                allCompanies = BikeNetwork[prop].map(company =>
+                    company)
             }
 
         },
@@ -160,6 +161,10 @@ const BikeMap = (function() {
             )
 
         },
+        /**
+         * Function that return names of cities for whole Network
+         * @param {Array}         City names 
+         */
         getAllCities: () => {
             return allCompanies.map(city =>
                 city.location.city)
@@ -179,12 +184,12 @@ const BikeMap = (function() {
             selElem.innerHTML = `<option  value="- Available Cities -"label="Select City" selected disabled></option>`;
             const code = BikeMap.getCityCountryCode();
             const city = BikeMap.getAllCities();
+
             for (let i = 0; i < code.length; i++) {
                 if ($.inArray(code[i], countries) != -1) {
                     //Set option values
                     selElem.innerHTML += `<option value="${city[i]}" label="${city[i]}">${city[i]}</option>`;
                 }
-
             }
             //Eventhandler added to input element
             document.getElementById("input").addEventListener("change", BikeMap.getBikeDetails);
@@ -287,22 +292,19 @@ const BikeMap = (function() {
         },
 
         /**
-         * Function with jQuery.get() request to load data from API 
+         * Function with jQuery.get() request to API with filter set to selected network ID load data from API. 
+         * Done promise with call to BikeMap.getStationsDetails() function with 
          * @param {String}         Selected city's network id 
          */
         getStations: (selCityStations) => {
 
             console.log(selCityStations)
             $.get(url + '/' + selCityStations, (allStations) => {
-
                     // console.log("success");
                 })
                 .done(function(allStations) {
-
                     // console.log("stations", allStations);
                     BikeMap.getStationsDetails(allStations);
-
-
                 })
                 .fail(function() {
                     alert("error");
@@ -320,18 +322,13 @@ const BikeMap = (function() {
             let city;
             let nrOfStations;
             for (prop in allStations) {
-                const stations = allStations[prop].stations;
                 city = allStations[prop].location.city;
-                for (let i = 0; i < stations.length; i++) {
-
-                    if (stations[i].free_bikes > 3) {
-                        locations.push([stations[i].latitude, stations[i].longitude, stations[i].name, stations[i].free_bikes]);
-
+                allStations[prop].stations.filter((stat) => {
+                    if (stat.free_bikes > 3) {
+                        locations.push([stat.latitude, stat.longitude, stat.name, stat.free_bikes]);
                     }
+                });
 
-                    // locations.push([stations[i].latitude, stations[i].longitude, stations[i].name, stations[i].free_bikes]);
-
-                }
             }
 
             //Call to createMap function with parameter locations
