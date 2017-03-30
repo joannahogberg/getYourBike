@@ -24,6 +24,7 @@ const BikeMap = (function() {
     let BikeNetwork = [];
     let allCompanies;
     let val;
+    let companyName;
 
     //Url link to citybik API
     const url = 'https://api.citybik.es/v2/networks';
@@ -68,6 +69,7 @@ const BikeMap = (function() {
         getCountryCodes: (value) => {
 
             document.getElementById("map").innerHTML = "";
+            document.getElementById("map").style.height = "0";
 
             // Call to RESTful COUNTRIES API with callback function that returns objects in JSON format. 
             $.get("https://restcountries.eu/rest/v2/region/" + value, (countries) => {
@@ -121,6 +123,7 @@ const BikeMap = (function() {
             $.get(url, (companies) => {
                     BikeNetwork = companies;
                     console.log("success");
+
                 })
                 .done((companies) => {
                     console.log("finished");
@@ -140,6 +143,7 @@ const BikeMap = (function() {
 
         getAllCompanies: () => {
             for (prop in BikeNetwork) {
+
                 allCompanies = BikeNetwork[prop].map(city =>
                     city)
             }
@@ -274,8 +278,10 @@ const BikeMap = (function() {
 
             for (prop in selId) {
                 id = selId[prop].id;
+                companyName = selId[prop].company;
 
             }
+
             BikeMap.getStations(id);
 
         },
@@ -286,7 +292,7 @@ const BikeMap = (function() {
          */
         getStations: (selCityStations) => {
 
-
+            console.log(selCityStations)
             $.get(url + '/' + selCityStations, (allStations) => {
 
                     // console.log("success");
@@ -341,13 +347,17 @@ const BikeMap = (function() {
 
         createMap: (locations, city, nrOfStations) => {
             console.log(locations.length)
+            console.log(companyName)
+            var searchUrl = "https://encrypted.google.com/#q=" + companyName[0] + "bike";
+
             if (locations.length <= 0) {
                 mapInfoElem.innerHTML = "Unfortunately there are no available bikes in " + city + " at the moment";
+                document.getElementById("map").style.height = "0";
 
 
             } else {
 
-                mapInfoElem.innerHTML = "In " + city + ", you are able to find " + locations.length + " bike stations that have available bikes right now!";
+                mapInfoElem.innerHTML = "In " + city + ", you are able to find " + locations.length + " bike stations that have available bikes right now! To find out more about how to access the bikes go to Google: " + '<a target="blank" href="' + searchUrl + '" >' + companyName[0] + '</a>';
                 mapLoader.src = '';
                 mapLoader.style.height = '0';
                 //Styling for map
@@ -481,6 +491,7 @@ const BikeMap = (function() {
 
                 var bounds = new google.maps.LatLngBounds();
                 // Displays a map in the map element
+                document.getElementById("map").style.height = "400px";
                 var map = new google.maps.Map(document.getElementById('map'), {
                     zoom: 14,
                     mapTypeControlOptions: {

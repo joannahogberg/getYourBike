@@ -4,7 +4,7 @@ header {
     background-attachment: fixed;
     background-color: rgba(0, 0, 0, 0.3);
     background-blend-mode: overlay;
-    height: 250px;
+    height: 230px;
     align-items: center;
     justify-content: center;
     color: ghostwhite;
@@ -14,15 +14,6 @@ header {
     text-align: center;
     width: 100%;
 }
-
-#map {
-    height: 400px;
-}
-
-
-/*#loader {
-    height: 250px;
-}*/
 
 input[list="selCity"] {
     width: 12em;

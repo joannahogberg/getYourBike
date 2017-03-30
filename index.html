@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
     <link rel="stylesheet" href="css/bootstrap-flex.css">
     <link rel="stylesheet" href="css/main.css">
     <title>getYourBike</title>
@@ -21,10 +22,14 @@
 
 
         <div class="row flex-items-xs-center mb-0">
-            <article class="col-sm-10 col-md-10 col-lg-12 p-1">
+            <article class="col-sm-10 col-md-10 col-lg-8 p-1">
                 <h3 class="text-xs-center mb-1">Are you about to go travel and love exploring your destinations by bike?</h3>
-                <p class="text-xs-center ">I love traveling and I love biking so I have set up a app to make it easy to know if I can combine my passions at the places I visit.</p>
-                <p class="text-xs-center">To get started just choose if you're going to stay in Europe or if you're crossing the Atlantic:</p>
+                <p>I love traveling and I love biking so I have set up a app to make it easy to know if I can combine my passions at the places I visit.</p>
+
+                <p>Around the world cities offer public bike-sharing programmes​. The world's first bike share program "White Fietsenplan", started in Amsterdam back in 1965. The systems offer cities a new, sustainable, healthy form of public transport that
+                    fills the gaps that buses and trams can’t reach, 24 hours a day, seven days a week.</p>
+
+                <h5 class="text-xs-center">To get started just choose if you're going to stay in Europe or if you're crossing the Atlantic:</h5>
             </article>
         </div>
 
@@ -40,7 +45,7 @@
 
 
         <div class="row flex-items-xs-center mb-0">
-            <article class="col-sm-10 col-md-11 col-lg-12 p-1">
+            <article class="col-sm-10 col-md-10 col-lg-8 p-1">
 
                 <span id="selContinents" class="text-xs-center mb-1"></span>
                 <p class="text-xs-center"><span id="selCityInfo">To be able to select a city you need to click any of the buttons above.</span></p>
@@ -63,20 +68,31 @@
  </label>
         </div>
 
+
         <div class="row flex-items-xs-center">
-            <span id="mapInfoText" class="text-xs-center mb-1"></span>
+            <div class="col-sm-10 col-md-10 col-lg-8 mb-1 flex-items-xs-center">
+                <span id="mapInfoText" class="text-xs-center mb-1"></span>
+            </div>
         </div>
         <div class="row flex-items-xs-center">
             <img src="" alt="" id="mapLoader" class="img-fluid">
             <figure id="map" class="col-xs-10 col-sm-10 col-lg-9"></figure>
 
         </div>
+        <div class="row flex-items-xs-center mb-0">
+            <div class="col-sm-10 col-md-10 col-lg-8 mb-1 flex-items-xs-center">
+                <h5 class="text-xs-center">To get rollin' is easy</h5>
+                <p>When you found your favorite city and feel hungry to go biking just follow the steps to on how to get rollin' and enjoy your rides!</p>
+                <img src="pics/howtobike.jpg" alt="" id="" class="img-fluid">
+            </div>
+            <section class="col-sm-9 col-md-9 col-lg-7 alert alert-info mb-0 mt-1 p-1">
+                <h5 class="alert-heading text-xs-center">Ride Safe</h5>
+                <p class="mb-0">Make sure you always use a helmet. If you want to know more about how to avoid getting hit by cars you can read all about how to <a target="blank" href="http://bicyclesafe.com" title="bicyclesafe">BicycleSafe</a>.</p>
+            </section>
 
+        </div>
 
-
-
-
-        <footer class="row p-3 flex-items-xs-center">
+        <footer class="row p-3 flex-items-xs-center mt-0">
             <div class="col-xs-10 col-sm-12 col-lg-12 p-2 flex-items-xs-center">
                 <p class="text-xs-center mb-0">&copy; 2017 Joanna Högberg</p>
                 <p class="text-xs-center mb-0">API's used for this app: <a target="blank" href="https://api.citybik.es/v2/" title="CityBikes">CityBikes</a> | <a target="blank" href="https://restcountries.eu" title="Rest Countries">RestCountries</a> | <a target="blank" href="https://developers.google.com/maps/"
@@ -85,7 +101,10 @@
             </div>
         </footer>
         <script type="text/javascript" src="js/script.js "></script>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+
     </div>
 </body>
 
