@@ -276,17 +276,14 @@ const BikeMap = (function() {
                     selCityId = document.getElementById('options').options[i].value;
                     break;
                 } else if (document.getElementById('options').options[i].value !== document.getElementsByName("selCity")[0].value) {
-                    selCityId = null;
                     let inputVal = document.getElementById("input").value;
                     mapInfoElem.innerHTML = "Sorry, " + inputVal.toUpperCase() + " doesn't exist in our bike share network. Please make a new search and select from the options available.";
                     // mapInfoElem.style.color = "red";
-
-
                 }
             }
 
-            const selId = allCompanies.filter(function(item) {
-                return item.location.city.split(",")[0] === selCityId;
+            const selId = allCompanies.filter(function(city) {
+                return city.location.city.split(",")[0] === selCityId;
             });
             let id;
             for (prop in selId) {
