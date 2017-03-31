@@ -6,6 +6,7 @@
 Application to display pick-up stations for bikes in selected city https://joannahogberg.github.io/getYourBike/
 
 The idea for this app was to give the user a easy look over where to find public bike-sharing stations in the offered cities in Europe and North and South America. For stations with less then 3 bikes available I have choosen not to display the stations since the possibility that these bikes are no longer available is likely.
+I added an alert box at the bottom to inform the user regarding using helmet when biking and put a link to another website that gives instructions for how to ride safe around cars.
 
 ## Task
 - Downloading data from one or more open APIs serving data as JSON.
@@ -38,19 +39,15 @@ The app uses jQuery get() Method with the Promise interface to load data from th
 * jQuery get() Method with the Promise interface
 * Bootstrap 4 with flex-box layout
 * jQuery/VanillaJS/ES6
+⋅⋅* Module Pattern to structure code
 * HTML/CSS
-
-
-#### Design Pattern
-
-* Module Pattern to structure JS code
+⋅⋅* DOM Manipulation to change and style loader, map and text elements depending on user selections 
 
 
 #### My ToDo list 
 
-* Solve issue with option tags in iOS
-* Solve issue with clearing option tags when continent buttons are clicked
 * Sort issue to display only stations that are open. Problem here is that the returned object doesn't have a prototype to check this.
+* Would be happy to get a direct link to all companies to be able to offer the user the chance to easy access each company's information.
 
 
 *********

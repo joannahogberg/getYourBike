@@ -259,8 +259,8 @@ const BikeMap = (function() {
         getBikeDetails: () => {
 
             document.getElementById("map").innerHTML = "";
-            mapLoader.src = 'pics/loader.gif';
-            mapLoader.style.height = '250px';
+            // mapLoader.src = 'pics/loader.gif';
+            // mapLoader.style.height = '250px';
             //Get value from selected option for Safari
             const x = document.getElementById("options").selectedIndex;
             let selCityId = document.getElementsByTagName("option")[x].text;
@@ -304,7 +304,10 @@ const BikeMap = (function() {
                 })
                 .done(function(allStations) {
                     // console.log("stations", allStations);
+                    mapLoader.src = 'pics/loader.gif';
+                    mapLoader.style.height = '250px';
                     BikeMap.getStationsDetails(allStations);
+
                 })
                 .fail(function() {
                     alert("error");
@@ -317,6 +320,9 @@ const BikeMap = (function() {
         },
 
         getStationsDetails: (allStations) => {
+
+            mapLoader.src = '';
+            mapLoader.style.height = '0';
 
             let locations = [];
             let city;
@@ -345,6 +351,7 @@ const BikeMap = (function() {
         createMap: (locations, city, nrOfStations) => {
             console.log(locations.length)
             console.log(companyName)
+
             var searchUrl = "https://encrypted.google.com/#q=" + companyName[0] + "bike";
 
             if (locations.length <= 0) {
@@ -355,8 +362,8 @@ const BikeMap = (function() {
             } else {
 
                 mapInfoElem.innerHTML = "In " + city + ", you are able to find " + locations.length + " bike stations that have available bikes right now! To find out more about how to access the bikes go to Google: " + '<a target="blank" href="' + searchUrl + '" >' + companyName[0] + '</a>';
-                mapLoader.src = '';
-                mapLoader.style.height = '0';
+                // mapLoader.src = '';
+                // mapLoader.style.height = '0';
                 //Styling for map
                 var styledMapType = new google.maps.StyledMapType(
                     [{
