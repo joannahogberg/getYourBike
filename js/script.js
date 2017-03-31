@@ -19,6 +19,7 @@ const BikeMap = (function() {
     let mapInfoElem = document.getElementById("mapInfoText");
     selElem.innerHTML = "";
 
+
     //Global variable declarations
     let myLatLng;
     let BikeNetwork = [];
@@ -49,7 +50,7 @@ const BikeMap = (function() {
     });
 
 
-    // Google map call which responds with a json callback function from googlemaps
+    // Google map call which responds with a json callback function from googlemaps. API key to be able to respond back
     $.ajax({
         url: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCpCilSrre3u5TACGa1XjkVHCWGiBDZZ5o&callback=?',
         dataType: 'json',
@@ -62,18 +63,18 @@ const BikeMap = (function() {
 
         /**
          * Function with jQuery.get() request to load data from API
-         * @param {String}         Continents value 
+         * @param {String}         Selected continents value 
          */
 
 
         getCountryCodes: (value) => {
 
-            document.getElementById("map").innerHTML = "";
-            document.getElementById("map").style.height = "0";
 
             // Call to RESTful COUNTRIES API with callback function that returns objects in JSON format. 
             $.get("https://restcountries.eu/rest/v2/region/" + value, (countries) => {
                     console.log("success");
+                    document.getElementById("map").innerHTML = "";
+                    document.getElementById("map").style.height = "0";
 
                 })
                 .done((countries) => {
@@ -96,10 +97,14 @@ const BikeMap = (function() {
 
         },
 
-
+        /**
+         * Function that pushes all county codes into array
+         * @param {Object}          All countries from selected continent
+         * @return {Array}          Country codes 
+         */
         addCountryCodes: (countries) => {
 
-            let countriesArr = [];
+            const countriesArr = [];
             for (prop in countries) {
                 //Push the country code for each country in selected continent to countries array
                 countriesArr.push(countries[prop].alpha2Code);
@@ -116,7 +121,7 @@ const BikeMap = (function() {
          */
 
         getOptionDetails: (countries) => {
-            // alert("hej options")
+
 
             // Call to CityBikes API with callback function. Returns an object of all bikeNetworks in JSON format
             $.get(url, (companies) => {
@@ -187,8 +192,10 @@ const BikeMap = (function() {
 
             for (let i = 0; i < code.length; i++) {
                 if ($.inArray(code[i], countries) != -1) {
+                    //Remove last value if US state is included in string
+                    let cityVal = city[i].split(",")[0];
                     //Set option values
-                    selElem.innerHTML += `<option value="${city[i]}" label="${city[i]}">${city[i]}</option>`;
+                    selElem.innerHTML += `<option value="${cityVal}" label="${cityVal}">${cityVal}</option>`;
                 }
             }
             //Eventhandler added to input element
@@ -201,11 +208,9 @@ const BikeMap = (function() {
 
         /**
          * Function to remove loader and append information to user
-         * @param {String}         Continents value
          */
 
         removeLoader: () => {
-
 
             //Remove loader 
             loader.src = '';
@@ -221,7 +226,6 @@ const BikeMap = (function() {
                 selCityInfo.innerHTML = "";
 
             }
-
 
         },
         /**
@@ -254,39 +258,43 @@ const BikeMap = (function() {
 
 
         /**
-         * Function to set latitude and longitude values for selected city into myLatLng array
+         * Function to check values from input/select and get id for selected city
          */
         getBikeDetails: () => {
 
+            //Clear map
             document.getElementById("map").innerHTML = "";
-            // mapLoader.src = 'pics/loader.gif';
-            // mapLoader.style.height = '250px';
+
             //Get value from selected option for Safari
             const x = document.getElementById("options").selectedIndex;
             let selCityId = document.getElementsByTagName("option")[x].text;
 
 
-            // Get value from selected option in dataList
-            // for Chrome
+            // Get value from selected option in dataList for Chrome
             for (var i = 0; i < document.getElementById('options').options.length; i++) {
                 if (document.getElementById('options').options[i].value == document.getElementsByName("selCity")[0].value) {
-                    // alert(document.getElementById('options').options[i].value);
                     selCityId = document.getElementById('options').options[i].value;
                     break;
+                } else if (document.getElementById('options').options[i].value !== document.getElementsByName("selCity")[0].value) {
+                    selCityId = null;
+                    let inputVal = document.getElementById("input").value;
+                    mapInfoElem.innerHTML = "Sorry, " + inputVal.toUpperCase() + " doesn't exist in our bike share network. Please make a new search and select from the options available.";
+                    // mapInfoElem.style.color = "red";
+
+
                 }
             }
 
             const selId = allCompanies.filter(function(item) {
-                return item.location.city === selCityId;
+                return item.location.city.split(",")[0] === selCityId;
             });
             let id;
-
             for (prop in selId) {
                 id = selId[prop].id;
                 companyName = selId[prop].company;
 
             }
-
+            //Call to getStations function with parameter of selected city id
             BikeMap.getStations(id);
 
         },
@@ -301,16 +309,17 @@ const BikeMap = (function() {
             console.log(selCityStations)
             $.get(url + '/' + selCityStations, (allStations) => {
                     // console.log("success");
+
                 })
                 .done(function(allStations) {
-                    // console.log("stations", allStations);
+                    // Activate loader
                     mapLoader.src = 'pics/loader.gif';
                     mapLoader.style.height = '250px';
                     BikeMap.getStationsDetails(allStations);
 
                 })
                 .fail(function() {
-                    alert("error");
+                    console.log("error");
                 })
                 .always(function() {
                     console.log("finished");
@@ -318,6 +327,12 @@ const BikeMap = (function() {
                 });
 
         },
+
+
+        /**
+         * Function to set values for selected city 
+         * @param {Object}         Selected city 
+         */
 
         getStationsDetails: (allStations) => {
 
@@ -349,10 +364,10 @@ const BikeMap = (function() {
          */
 
         createMap: (locations, city, nrOfStations) => {
-            console.log(locations.length)
-            console.log(companyName)
 
-            var searchUrl = "https://encrypted.google.com/#q=" + companyName[0] + "bike";
+
+            //Assign a url link to google search with parameter companyname and bike
+            const searchUrl = "https://encrypted.google.com/#q=" + companyName[0] + "bike";
 
             if (locations.length <= 0) {
                 mapInfoElem.innerHTML = "Unfortunately there are no available bikes in " + city + " at the moment";
@@ -362,8 +377,7 @@ const BikeMap = (function() {
             } else {
 
                 mapInfoElem.innerHTML = "In " + city + ", you are able to find " + locations.length + " bike stations that have available bikes right now! To find out more about how to access the bikes go to Google: " + '<a target="blank" href="' + searchUrl + '" >' + companyName[0] + '</a>';
-                // mapLoader.src = '';
-                // mapLoader.style.height = '0';
+
                 //Styling for map
                 var styledMapType = new google.maps.StyledMapType(
                     [{
@@ -539,6 +553,7 @@ const BikeMap = (function() {
             }
 
             document.getElementById("input").addEventListener("click", BikeMap.deleteVal);
+            //Reset selectedIndex
             document.getElementById("options").selectedIndex = null;
         },
         //Clear the input field when clicked

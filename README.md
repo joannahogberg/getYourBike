@@ -39,9 +39,9 @@ The app uses jQuery get() Method with the Promise interface to load data from th
 * jQuery get() Method with the Promise interface
 * Bootstrap 4 with flex-box layout
 * jQuery/VanillaJS/ES6
-⋅⋅* Module Pattern to structure code
+ - Module Pattern to structure code
 * HTML/CSS
-⋅⋅* DOM Manipulation to change and style loader, map and text elements depending on user selections 
+ - DOM Manipulation to change and style loader, map and text elements depending on user selections 
 
 
 #### My ToDo list 
