@@ -26,6 +26,9 @@ const BikeMap = (function() {
     let allCompanies;
     let val;
     let companyName;
+    let countryNames;
+    let countryName;
+
 
     //Url link to citybik API
     const url = 'https://api.citybik.es/v2/networks';
@@ -73,6 +76,7 @@ const BikeMap = (function() {
             // Call to RESTful COUNTRIES API with callback function that returns objects in JSON format. 
             $.get("https://restcountries.eu/rest/v2/region/" + value, (countries) => {
                     console.log("success");
+                    countryNames = countries;
                     document.getElementById("map").innerHTML = "";
                     document.getElementById("map").style.height = "0";
 
@@ -104,16 +108,30 @@ const BikeMap = (function() {
          */
         addCountryCodes: (countries) => {
 
+
             const countriesArr = [];
             for (prop in countries) {
+
+
                 //Push the country code for each country in selected continent to countries array
                 countriesArr.push(countries[prop].alpha2Code);
             }
             //Call to getOptionDetails with parameter countriesArr
             BikeMap.getOptionDetails(countriesArr)
+                // BikeMap.getCountryName()
+
 
 
         },
+        // getCountryName: () => {
+
+        //     const count = countryNames.map(country =>
+
+
+        //         console.log(country.name)
+
+        //     )
+        // },
 
         /**
          * Function with jQuery.get() request to load data from API 
@@ -143,6 +161,8 @@ const BikeMap = (function() {
 
 
         },
+
+
 
 
         /**
@@ -206,6 +226,8 @@ const BikeMap = (function() {
 
         },
 
+
+
         /**
          * Function to remove loader and append information to user
          */
@@ -265,34 +287,47 @@ const BikeMap = (function() {
             //Clear map
             document.getElementById("map").innerHTML = "";
 
-            //Get value from selected option for Safari
+            // //Get value from selected option for Safari
             const x = document.getElementById("options").selectedIndex;
             let selCityId = document.getElementsByTagName("option")[x].text;
-
+            let selCityId2;
+            let selCityId3 = selCityId;
 
             // Get value from selected option in dataList for Chrome
             for (var i = 0; i < document.getElementById('options').options.length; i++) {
                 if (document.getElementById('options').options[i].value == document.getElementsByName("selCity")[0].value) {
-                    selCityId = document.getElementById('options').options[i].value;
+                    selCityId2 = document.getElementById('options').options[i].value;
                     break;
                 } else if (document.getElementById('options').options[i].value !== document.getElementsByName("selCity")[0].value) {
                     let inputVal = document.getElementById("input").value;
                     mapInfoElem.innerHTML = "Sorry, " + inputVal.toUpperCase() + " doesn't exist in our bike share network. Please make a new search and select from the options available.";
-                    // mapInfoElem.style.color = "red";
-                }
-            }
+                    selCityId = null;
 
+                }
+
+            }
             const selId = allCompanies.filter(function(city) {
-                return city.location.city.split(",")[0] === selCityId;
+                return city.location.city.split(",")[0] === (selCityId2 || selCityId3);
             });
             let id;
+            let countryCode;
             for (prop in selId) {
+                countryCode = selId[prop].location.country;
                 id = selId[prop].id;
                 companyName = selId[prop].company;
 
             }
             //Call to getStations function with parameter of selected city id
             BikeMap.getStations(id);
+
+            //Filter() method to get name of selected country and assign it to the countryName variable
+            countryNames.filter((name) => {
+
+                if (name.alpha2Code == countryCode) {
+                    countryName = name.name;
+                }
+            });
+
 
         },
 
@@ -373,7 +408,7 @@ const BikeMap = (function() {
 
             } else {
 
-                mapInfoElem.innerHTML = "In " + city + ", you are able to find " + locations.length + " bike stations that have available bikes right now! To find out more about how to access the bikes go to Google: " + '<a target="blank" href="' + searchUrl + '" >' + companyName[0] + '</a>';
+                mapInfoElem.innerHTML = city.split(",")[0] + " in " + countryName + ", right now have " + locations.length + " bike stations with available bikes! To find out more here is a link to the Google search for this program: " + '<a target="blank" href="' + searchUrl + '" >' + companyName[0] + '</a>';
 
                 //Styling for map
                 var styledMapType = new google.maps.StyledMapType(
